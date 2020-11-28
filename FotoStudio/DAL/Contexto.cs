@@ -10,10 +10,15 @@ namespace FotoStudio.DAL
 {
     public class Contexto : DbContext
     {
-        public DbSet<Usuario> Usuario { get; set; }
-        public DbSet<Cliente> Cliente { get; set; }
-        public DbSet<Venta> Venta { get; set; }
-        public DbSet<Categoria> Categoria { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Cliente> Clientes { get; set; }
+        public DbSet<Fotografos> Fotografos { get; set; }
+        public DbSet<Venta> Ventas { get; set; }
+
+        public DbSet<Articulos> Articulos { get; set; }
+        public DbSet<Eventos> Eventos { get; set; }
+        public DbSet<Categoria> Categorias { get; set; }
+        public DbSet<Compras> Compras { get; set; }
 
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -32,7 +32,7 @@ namespace FotoStudio.BLL
             {
                 usuario.Contrasena = Encriptar(usuario.Contrasena);
 
-                if (contexto.Usuario.Add(usuario) != null)
+                if (contexto.Usuarios.Add(usuario) != null)
                     paso = contexto.SaveChanges() > 0;
             }
             catch (Exception)
@@ -87,10 +87,10 @@ namespace FotoStudio.BLL
             Contexto contexto = new Contexto();
             try
             {
-                var usuario = contexto.Usuario.Find(id);
+                var usuario = contexto.Usuarios.Find(id);
                 if (usuario != null)
                 {
-                    contexto.Usuario.Remove(usuario);
+                    contexto.Usuarios.Remove(usuario);
                     paso = contexto.SaveChanges() > 0;
                 }
             }
@@ -110,7 +110,7 @@ namespace FotoStudio.BLL
             Contexto contexto = new Contexto();
             try
             {
-                usuario = contexto.Usuario.Find(id);
+                usuario = contexto.Usuarios.Find(id);
                 if (usuario != null)
                     usuario.Contrasena = DesEncriptar(usuario.Contrasena);
             }
@@ -145,7 +145,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                encontrado = contexto.Usuario.Any(u => u.UsuarioId == id);
+                encontrado = contexto.Usuarios.Any(u => u.UsuarioId == id);
             }
             catch (Exception)
             {
@@ -165,7 +165,7 @@ namespace FotoStudio.BLL
             Contexto contexto = new Contexto();
             try
             {
-                Lista = contexto.Usuario.Where(usuario).ToList();
+                Lista = contexto.Usuarios.Where(usuario).ToList();
             }
             catch (Exception)
             {
@@ -187,7 +187,7 @@ namespace FotoStudio.BLL
             {
                 clave = Encriptar(clave);
 
-                if (contexto.Usuario.Where(u => u.NombreUsuario == usuario && u.Contrasena == clave).SingleOrDefault() != null)
+                if (contexto.Usuarios.Where(u => u.NombreUsuario == usuario && u.Contrasena == clave).SingleOrDefault() != null)
                     paso = true;
             }
             catch (Exception)
@@ -211,7 +211,7 @@ namespace FotoStudio.BLL
             {
                 clave = Encriptar(clave);
 
-                id = contexto.Usuario.Where(u => u.NombreUsuario == usuario && u.Contrasena == clave).FirstOrDefault().UsuarioId.ToString();
+                id = contexto.Usuarios.Where(u => u.NombreUsuario == usuario && u.Contrasena == clave).FirstOrDefault().UsuarioId.ToString();
             }
             catch (Exception)
             {

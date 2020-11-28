@@ -5,37 +5,39 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace FotoStudio.BLL
 {
-    public class VentaBLL
+    public class ArticulosBLL
     {
-        public static bool Guardar(Venta ventas)
+        public static bool Guardar(Articulos articulos)
         {
-            if (!Existe(ventas.VentaId))
+            if (!Existe(articulos.ArticuloId))
             {
-                return Insertar(ventas);
+                return Insertar(articulos);
             }
             else
             {
-                return Modificar(ventas);
+                return Modificar(articulos);
             }
+
 
         }
 
-        public static bool Insertar(Venta venta)
+        private static bool Insertar(Articulos articulos)
         {
-            bool paso = false;
             Contexto db = new Contexto();
+            bool paso = false;
 
             try
             {
-                if (db.Ventas.Add(venta) != null)
+                if (db.Articulos.Add(articulos) != null)
+                {
                     paso = (db.SaveChanges() > 0);
+                }
             }
-            catch (Exception)
+            catch
             {
                 throw;
             }
@@ -46,22 +48,17 @@ namespace FotoStudio.BLL
             return paso;
         }
 
-        public static bool Modificar(Venta venta)
+        private static bool Modificar(Articulos articulos)
         {
-            bool paso = false;
             Contexto db = new Contexto();
+            bool paso = false;
 
             try
             {
-                db.Database.ExecuteSqlRaw($"Delete FROM VentasDetalle Where VentasId={venta.VentaId}");
-                foreach (var item in venta.VentasDetalle)
-                {
-                    db.Entry(item).State = EntityState.Added;
-                }
-                db.Entry(venta).State = EntityState.Modified;
+                db.Entry(articulos).State = EntityState.Modified;
                 paso = (db.SaveChanges() > 0);
             }
-            catch (Exception)
+            catch
             {
                 throw;
             }
@@ -70,26 +67,6 @@ namespace FotoStudio.BLL
                 db.Dispose();
             }
             return paso;
-        }
-
-        public static Venta Buscar(int id)
-        {
-            Venta venta = new Venta();
-            Contexto db = new Contexto();
-
-            try
-            {
-                venta = db.Ventas.Include(x => x.VentasDetalle).Where(x => x.VentaId == id).SingleOrDefault();
-            }
-            catch (Exception)
-            {
-                throw;
-            }
-            finally
-            {
-                db.Dispose();
-            }
-            return venta;
         }
 
         private static bool Existe(int id)
@@ -99,7 +76,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                encontrado = db.Ventas.Any(d => d.VentaId == id);
+                encontrado = db.Articulos.Any(d => d.ArticuloId == id);
             }
             catch
             {
@@ -112,18 +89,19 @@ namespace FotoStudio.BLL
             return encontrado;
         }
 
+
         public static bool Eliminar(int id)
         {
-            bool paso = false;
             Contexto db = new Contexto();
+            bool paso = false;
 
             try
             {
-                var eliminar = VentaBLL.Buscar(id);
+                var eliminar = db.Articulos.Find(id);
                 db.Entry(eliminar).State = EntityState.Deleted;
                 paso = (db.SaveChanges() > 0);
             }
-            catch (Exception)
+            catch
             {
                 throw;
             }
@@ -134,16 +112,18 @@ namespace FotoStudio.BLL
             return paso;
         }
 
-        public static List<Venta> GetList(Expression<Func<Venta, bool>> venta)
+        public static Articulos Buscar(int id)
         {
-            List<Venta> Lista = new List<Venta>();
             Contexto db = new Contexto();
+            Articulos articulos = new Articulos();
 
             try
             {
-                Lista = db.Ventas.Where(venta).ToList();
+                articulos = db.Articulos.Include(x => x.ComprasDetalle).
+                    Where(x => x.ArticuloId == id).
+                    SingleOrDefault();
             }
-            catch (Exception)
+            catch
             {
                 throw;
             }
@@ -151,7 +131,32 @@ namespace FotoStudio.BLL
             {
                 db.Dispose();
             }
-            return Lista;
+            return articulos;
         }
+
+
+        public static List<Articulos> GetList(Expression<Func<Articulos, bool>> articulos)
+        {
+            Contexto db = new Contexto();
+            List<Articulos> listado = new List<Articulos>();
+
+            try
+            {
+                listado = db.Articulos.Where(articulos).ToList();
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                db.Dispose();
+            }
+            return listado;
+        }
+
+
+
+
     }
 }

@@ -32,7 +32,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                if (db.Categoria.Add(categorias) != null)
+                if (db.Categorias.Add(categorias) != null)
                 {
                     paso = (db.SaveChanges() > 0);
                 }
@@ -76,7 +76,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                encontrado = db.Categoria.Any(d => d.CategoriaId == id);
+                encontrado = db.Categorias.Any(d => d.CategoriaId == id);
             }
             catch
             {
@@ -96,7 +96,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                var eliminar = db.Categoria.Find(id);
+                var eliminar = db.Categorias.Find(id);
                 db.Entry(eliminar).State = EntityState.Deleted;
                 paso = (db.SaveChanges() > 0);
             }
@@ -118,7 +118,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                categorias = db.Categoria.Find(id);
+                categorias = db.Categorias.Find(id);
             }
             catch
             {
@@ -138,7 +138,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                listado = db.Categoria.Where(categorias).ToList();
+                listado = db.Categorias.Where(categorias).ToList();
             }
             catch
             {

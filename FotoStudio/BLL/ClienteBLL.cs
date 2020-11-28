@@ -32,7 +32,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                if (db.Cliente.Add(cliente) != null)
+                if (db.Clientes.Add(cliente) != null)
                     paso = (db.SaveChanges() > 0);
             }
             catch (Exception)
@@ -74,7 +74,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                encontrado = db.Cliente.Any(d => d.ClienteId == id);
+                encontrado = db.Clientes.Any(d => d.ClienteId == id);
             }
             catch
             {
@@ -94,7 +94,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                var eliminar = db.Cliente.Find(id);
+                var eliminar = db.Clientes.Find(id);
                 db.Entry(eliminar).State = EntityState.Deleted;
                 paso = (db.SaveChanges() > 0);
             }
@@ -116,7 +116,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                cliente = db.Cliente.Find(id);
+                cliente = db.Clientes.Find(id);
             }
             catch (Exception)
             {
@@ -136,7 +136,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                Lista = db.Cliente.Where(cliente).ToList();
+                Lista = db.Clientes.Where(cliente).ToList();
             }
             catch (Exception)
             {
