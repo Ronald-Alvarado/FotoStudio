@@ -1,0 +1,138 @@
+﻿@page "/RCategorias"
+@page "/RCategorias/{CategoriaId:int}"
+
+@using FotoStudio.Entidades
+@using FotoStudio.BLL
+
+@inject IToastService toast
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <NotAuthorized>
+        <p class="h4 text-center">Usted no esta autorizado para acceder a esta pagina</p>
+
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+    <EditForm Model="Categoria" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+
+        <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Registro Categoria</h3>
+                </div>
+                <div class="card-body">
+                    <form>
+
+
+                        <div class="form-row align-items-center">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Categoria Id:</label>
+                                    <div class="input-group">
+                                        <InputNumber @bind-Value="Categoria.CategoriaId" class="form-control col-4" />
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Usuario Id:</label>
+                            <InputNumber @bind-Value="Categoria.UsuarioId" class="form-control" />
+                            <ValidationMessage For="@(() => Categoria.UsuarioId)" />
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>Descripcion:</label>
+                            <InputText @bind-Value="Categoria.Nombre" class="form-control" />
+                            <ValidationMessage For="@(() => Categoria.Nombre)" />
+                        </div>
+
+                    </form>
+                </div>
+                <div class="card-footer bg-dark">
+                    <div class="form-group text-center" display: inline-block>
+                        <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">Nuevo</button>
+                        <button type="submit" class="btn btn-lg btn-success">Guardar</button>
+                        <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+</EditForm>
+}
+
+
+@code {
+    Categoria Categoria = new Categoria();
+
+    [Parameter]
+    public int CategoriaId { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+    private void Nuevo()
+    {
+        Categoria = new Categoria();
+    }
+
+    private void Guardar()
+    {
+        bool guardo;
+
+
+        guardo = CategoriaBLL.Guardar(Categoria);
+
+        if (guardo)
+        {
+            Nuevo();
+            toast.ShowSuccess("Guardado correctamente");
+        }
+        else
+            toast.ShowError("No fue posible guardar");
+    }
+
+    private void Eliminar()
+    {
+        bool elimino;
+
+        elimino = CategoriaBLL.Eliminar(Categoria.CategoriaId);
+
+        if (elimino)
+        {
+            Nuevo();
+            toast.ShowSuccess("Eliminado correctamente");
+        }
+        else
+            toast.ShowError("No fue posible eliminar");
+    }
+
+    private void Buscar()
+    {
+        if (Categoria.CategoriaId > 0)
+        {
+            var encontrado = CategoriaBLL.Buscar(Categoria.CategoriaId);
+
+            if (encontrado != null)
+                this.Categoria = encontrado;
+            else
+                toast.ShowWarning("No encontrado");
+        }
+    }
+
+}
