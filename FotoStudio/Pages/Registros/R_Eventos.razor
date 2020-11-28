@@ -1,0 +1,182 @@
+﻿@page "/REventos"
+@page "/REventosos/{EventoId:int}"
+
+@using FotoStudio.Entidades
+@using FotoStudio.BLL
+
+@inject IToastService toast
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <NotAuthorized>
+        <p class="h4 text-center">Usted no esta autorizado para acceder a esta pagina</p>
+
+    </NotAuthorized>
+</AuthorizeView>
+
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+<EditForm Model="Evento" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Registro Eventos</h3>
+            </div>
+            <div class="card-body">
+                <form>
+
+
+                    <div class="form-row align-items-center">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Evento Id:</label>
+                                <div class="input-group">
+                                    <InputNumber @bind-Value="Evento.EventoId" class="form-control col-4" />
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Usuario Id:</label>
+                        <InputNumber @bind-Value="Evento.UsuarioId" class="form-control" />
+                        <ValidationMessage For="@(() => Evento.UsuarioId)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fotografo:</label>
+                        <select @bind="Evento.FotografoId" class="form-control">
+                            <option value="0" disabled selected>Elija un Fotografo</option>
+                            @foreach (var item in Lista)
+                            {
+                                <option value="@item.FotografoId">@item.Nombres</option>
+                            }
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Descripción:</label>
+                        <InputText @bind-Value="Evento.Descripcion" class="form-control" />
+                        <ValidationMessage For="@(() => Evento.Descripcion)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Lugar:</label>
+                        <InputText @bind-Value="Evento.Lugar" class="form-control" />
+                        <ValidationMessage For="@(() => Evento.Lugar)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha Inicio:</label>
+                        <InputDate @bind-Value="Evento.FechaInicio" class="form-control" />
+                        <ValidationMessage For="@(() => Evento.FechaInicio)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Fecha Fin:</label>
+                        <InputDate @bind-Value="Evento.FechaFin" class="form-control" />
+                        <ValidationMessage For="@(() => Evento.FechaFin)" />
+                    </div>
+
+                    <div class="form-group">
+                        <label>Precio:</label>
+                        <InputNumber @bind-Value="Evento.Precio" class="form-control" />
+                        <ValidationMessage For="@(() => Evento.Precio)" />
+                    </div>
+
+
+                </form>
+            </div>
+            <div class="card-footer">
+                <div class="form-group text-center" display: inline-block>
+                    <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><i class="oi oi-plus" />Nuevo</button>
+                    <button type="submit" class="btn btn-lg btn-success"><i class="oi oi-hard-drive" />Guardar</button>
+                    <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><i class="oi oi-trash" />Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</EditForm>
+}
+
+@code {
+
+    Eventos Evento = new Eventos();
+
+    [Parameter]
+    public int EventoId { get; set; }
+
+    private List<Fotografos> Lista = new List<Fotografos>();
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+    private void Nuevo()
+    {
+        Evento = new Eventos();
+        Lista = FotografosBLL.GetList(f => true);
+    }
+
+
+    private void ObtenerFotografo()
+    {
+        Lista.Clear();
+
+        Fotografos fotografo = FotografosBLL.Buscar(Evento.FotografoId);
+        Lista.Add(fotografo);
+    }
+
+    private void Guardar()
+    {
+        bool guardo;
+
+        guardo = EventosBLL.Guardar(Evento);
+
+        if (guardo)
+        {
+            Nuevo();
+            toast.ShowSuccess("Guardado correctamente");
+        }
+        else
+            toast.ShowError("No fue posible guardar");
+    }
+
+    private void Eliminar()
+    {
+        bool elimino;
+
+        elimino = EventosBLL.Eliminar(Evento.EventoId);
+
+        if (elimino)
+        {
+            Nuevo();
+            toast.ShowSuccess("Eliminado correctamente");
+        }
+        else
+            toast.ShowError("No fue posible eliminar");
+    }
+
+    private void Buscar()
+    {
+        if (Evento.EventoId > 0)
+        {
+            var encontrado = EventosBLL.Buscar(Evento.EventoId);
+
+            if (encontrado != null)
+                this.Evento = encontrado;
+            else
+                toast.ShowWarning("No encontrado");
+        }
+    }
+
+}
