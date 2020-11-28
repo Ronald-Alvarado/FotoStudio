@@ -1,0 +1,184 @@
+﻿@page "/RClientes"
+@page "/RClientes/{ClienteId:int}"
+
+@using FotoStudio.Entidades
+@using FotoStudio.BLL
+
+@inject IToastService toast
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <NotAuthorized>
+        <p class="h4 text-center">Usted no esta autorizado para acceder a esta pagina</p>
+
+    </NotAuthorized>
+</AuthorizeView>
+
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+    <EditForm Model="Cliente" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
+
+        <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Registro Clientes</h3>
+                </div>
+                <div class="card-body">
+                    <form>
+
+
+                        <div class="form-row align-items-center">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Cliente Id:</label>
+                                    <div class="input-group">
+                                        <InputNumber @bind-Value="Cliente.ClienteId" class="form-control col-4" />
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Usuario Id:</label>
+                            <InputNumber @bind-Value="Cliente.UsuarioId" class="form-control" />
+                            <ValidationMessage For="@(() => Cliente.UsuarioId)" />
+                        </div>
+
+
+                        <div class="form-group">
+                            <label>Nombres:</label>
+                            <InputText @bind-Value="Cliente.Nombres" class="form-control" />
+                            <ValidationMessage For="@(() => Cliente.Nombres)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Apellidos:</label>
+                            <InputText @bind-Value="Cliente.Apellidos" class="form-control" />
+                            <ValidationMessage For="@(() => Cliente.Apellidos)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cédula:</label>
+                            <InputText @bind-Value="Cliente.Cedula" class="form-control" />
+                            <ValidationMessage For="@(() => Cliente.Cedula)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Dirección:</label>
+                            <InputText @bind-Value="Cliente.Direccion" class="form-control" />
+                            <ValidationMessage For="@(() => Cliente.Direccion)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Teléfono:</label>
+                            <InputText @bind-Value="Cliente.Telefono" class="form-control" />
+                            <ValidationMessage For="@(() => Cliente.Telefono)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Celular:</label>
+                            <InputText @bind-Value="Cliente.Celular" class="form-control" />
+                            <ValidationMessage For="@(() => Cliente.Celular)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Sexo:</label>
+                            <select id="Sexo_select" @bind="Cliente.Sexo" class="form-control">
+                                <option value="" disabled selected>Elija una opción</option>
+                                <option value="Hombre">Hombre</option>
+                                <option value="Mujer">Mujer</option>
+                            </select>
+                            <ValidationMessage For="@(() => Cliente.Sexo)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fecha de Nacimiento:</label>
+                            <InputDate @bind-Value="Cliente.FechaNacimiento" class="form-control" />
+                            <ValidationMessage For="@(() => Cliente.FechaNacimiento)" />
+                        </div>
+
+                    </form>
+                </div>
+                <div class="card-footer bg-dark">
+                    <div class="form-group text-center" display: inline-block>
+                        <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">Nuevo</button>
+                        <button type="submit" class="btn btn-lg btn-success">Guardar</button>
+                        <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">Eliminar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            
+
+
+
+</EditForm>
+}
+
+@code {
+
+    Cliente Cliente = new Cliente();
+
+    [Parameter]
+    public int ClienteId { get; set; }
+
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+    private void Nuevo()
+    {
+        Cliente = new Cliente();
+    }
+
+    private void Guardar()
+    {
+        bool guardo;
+
+        guardo = ClienteBLL.Guardar(Cliente);
+
+        if (guardo)
+        {
+            Nuevo();
+            toast.ShowSuccess("Guardado correctamente");
+        }
+        else
+            toast.ShowError("No fue posible guardar");
+    }
+
+    private void Eliminar()
+    {
+        bool elimino;
+
+        elimino = ClienteBLL.Eliminar(Cliente.ClienteId);
+
+        if (elimino)
+        {
+            Nuevo();
+            toast.ShowSuccess("Eliminado correctamente");
+        }
+        else
+            toast.ShowError("No fue posible eliminar");
+    }
+
+    private void Buscar()
+    {
+        if (Cliente.ClienteId > 0)
+        {
+            var encontrado = ClienteBLL.Buscar(Cliente.ClienteId);
+
+            if (encontrado != null)
+                this.Cliente = encontrado;
+            else
+                toast.ShowWarning("No encontrado");
+        }
+    }
+
+}

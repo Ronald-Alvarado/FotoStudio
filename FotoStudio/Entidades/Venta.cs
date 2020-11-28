@@ -24,7 +24,7 @@ namespace FotoStudio.Entidades
         public decimal Total { get; set; }
 
         [ForeignKey("VentaId")]
-        public virtual List<VentaDetalle> VentasDetalle { get; set; }
+        public virtual List<VentaDetalle> VentaDetalle { get; set; }
 
         public Venta()
         {
@@ -35,7 +35,7 @@ namespace FotoStudio.Entidades
             Fecha = DateTime.Now;
             Total = 0.0m;
 
-            VentasDetalle = new List<VentaDetalle>();
+            VentaDetalle = new List<VentaDetalle>();
         }
 
 
