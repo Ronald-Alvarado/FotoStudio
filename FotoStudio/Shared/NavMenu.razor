@@ -7,21 +7,53 @@
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </li>
+
+        <AuthorizeView>
+            <NotAuthorized>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                        <span class="oi oi-home" aria-hidden="true"></span> Home
+                    </NavLink>
+                </li>
+            </NotAuthorized>
+                <Authorized>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="RClientes">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Registro de Clientes
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="RVentas">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Registro de Ventas
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="RCategorias">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Registro de Categorias
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="RArticulos">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Registro de Articulos
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="RCompras">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Registro de Compras
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="REventos">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Registro de Eventos
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="RFotografos">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Registro de Fotografos
+                        </NavLink>
+                    </li>
+                </Authorized>
+        </AuthorizeView>
     </ul>
 </div>
 

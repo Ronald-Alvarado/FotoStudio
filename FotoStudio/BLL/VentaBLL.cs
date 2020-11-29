@@ -54,7 +54,7 @@ namespace FotoStudio.BLL
             try
             {
                 db.Database.ExecuteSqlRaw($"Delete FROM VentasDetalle Where VentasId={venta.VentaId}");
-                foreach (var item in venta.VentasDetalle)
+                foreach (var item in venta.VentaDetalle)
                 {
                     db.Entry(item).State = EntityState.Added;
                 }
@@ -79,7 +79,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                venta = db.Ventas.Include(x => x.VentasDetalle).Where(x => x.VentaId == id).SingleOrDefault();
+                venta = db.Ventas.Include(x => x.VentaDetalle).Where(x => x.VentaId == id).SingleOrDefault();
             }
             catch (Exception)
             {

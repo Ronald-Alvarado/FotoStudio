@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FotoStudio.Pages
 {
-    public class LogoutModel : PageModel
+    public class LogOutModel : PageModel
     {
         public async Task<IActionResult> OnGetAsync()
         {

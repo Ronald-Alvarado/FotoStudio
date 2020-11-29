@@ -28,7 +28,12 @@ namespace FotoStudio.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Usuario>().HasData(new Usuario { UsuarioId = 1, Nombres = "Administrador", NombreUsuario = "Admin", Contrasena = UsuarioBLL.Encriptar("Admin"), Email = "ericksvicente@hotmail.com" });
+            modelBuilder.Entity<Usuario>().HasData(new Usuario { 
+                            UsuarioId = 1, 
+                            Nombres = "Administrador", 
+                            NombreUsuario = "admin", 
+                            Contrasena = UsuarioBLL.Encriptar("admin"), 
+                            Email = "Adminis@example.com" });
         }
 
 

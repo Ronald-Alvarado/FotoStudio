@@ -4,21 +4,11 @@
 
 <AuthorizeView>
     <Authorized>
-        <div class="card">
-            <div class="card-header row justify-content-md-center bg-light">
-                <h1>LogIn</h1>
-            </div>
-            <div class="card-body text-center">
-
-            </div>
-            <div class="card-footer bg-dark text-center">
-
-                <p>
-                    EF Studio es una empresa multifacética en el área de la imagen digital.
-                    Fue fundada por los fotografos Erick Vicente y Frandy Mota, en Julio del
-                    2020 a raíz de una idea tecnologica de virtualizar un sistema de registro
-                    y consulta en linea en el ambito de la fotografia.
-                </p>
+        <div class="container shadow-lg p-3 rb-5 bg-white rounded col-md-8">
+            <div class="card">
+                <div class="card-header justify-content-md-center badge-light">
+                    <h1>Has sido autorizado</h1>
+                </div>
             </div>
         </div>
     </Authorized>
@@ -46,7 +36,7 @@
                             <a class="ml-md-auto btn btn-success text-center"
                                href="/login?paramUsername=@encode(Usuario)&paramPassword=@encode(Contrasena)"
                                target="_top">Login<span class="oi oi-account-login"></span></a>
-                            <a class="text-right" href="R_Usuarios">Register</a>
+                            <a class="text-right" href="RUsuarios">Register</a>
                         </div>
                     </div>
                 </div>

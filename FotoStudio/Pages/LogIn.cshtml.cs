@@ -13,12 +13,11 @@ using FotoStudio.BLL;
 namespace FotoStudio.Pages
 {
     [AllowAnonymous]
-    public class LoginModel : PageModel
+    public class LogInModel : PageModel
     {
         public string ReturnUrl { get; set; }
 
-        public async Task<IActionResult>
-            OnGetAsync(string paramUsername, string paramPassword)
+        public async Task<IActionResult>OnGetAsync(string paramUsername, string paramPassword)
         {
             string returnUrl = Url.Content("~/");
 
