@@ -1,0 +1,241 @@
+﻿@page "/CCompras"
+
+
+
+@using FotoStudio.Entidades
+@using FotoStudio.BLL
+
+
+
+@inject IToastService toast
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+
+<AuthorizeView>
+    <NotAuthorized>
+        <p class="h4 text-center">Usted no esta autorizado para acceder a esta pagina</p>
+
+
+
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+
+
+
+    <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h1>Consulta de Compras</h1>
+            </div>
+
+
+
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Filtrar por Fecha</label>
+                            <select class="form-control" @bind="FiltroFecha">
+                                <option value="0" disabled selected>Todo</option>
+                                <option value="1">Fecha</option>
+                            </select>
+                        </div>
+                        &nbsp;
+                        <div class="form-group">
+                            <label>Desde</label>
+                            <input type="date" @bind="Desde" class="form-control" />
+                        </div>
+                        &nbsp;
+                        <div class="form-group">
+                            <label>Hasta</label>
+                            <input type="date" @bind="Hasta" class="form-control" />
+                        </div>
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        &nbsp;
+                        <div class="form-group">
+                            <label>Filtro</label>
+                            <select class="form-control" @bind="Filtro">
+                                <option value="0">Todo</option>
+                                <option value="1">CompraId</option>
+                                <option value="2">UsuarioId</option>
+                                <option value="3">Monto</option>
+                            </select>
+                        </div>
+                        &nbsp;
+                        <div class="form-group">
+                            <label>Criterio</label>
+                            <div class="input-group">
+                                <input type="text" @bind="Criterio" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary input-group-text" @onclick="@(u => Consultar())"><i class="oi oi-list-rich" /> Consultar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
+                        <table class="table table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>CompraId</th>
+                                    <th>UsuarioId</th>
+                                    <th>Monto</th>
+                                    <th>Fecha</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                @foreach (var item in ListaCompras)
+                                {
+                                    <tr>
+                                        <td>@item.CompraId</td>
+                                        <td>@item.UsuarioId</td>
+                                        <td>@item.Monto</td>
+                                        <td>@item.Fecha</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+@code {
+    public List<Compras> ListaCompras { get; set; }
+
+
+
+    private DateTime Desde { get; set; } = DateTime.Now;
+    private DateTime Hasta { get; set; } = DateTime.Now;
+
+
+
+    public string Filtro { get; set; }
+    private string FiltroFecha { get; set; }
+
+
+
+    public string Criterio { get; set; }
+
+
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+
+
+    private void Nuevo()
+    {
+        ListaCompras = new List<Compras>();
+        Filtro = "0";
+        Criterio = string.Empty;
+    }
+
+
+
+    public void Consultar()
+    {
+        switch (Filtro)
+        {
+            case "0": //Todo
+                ListaCompras = ComprasBLL.GetList(c => true);
+                break;
+            case "1": //CompraId
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        int id = Convert.ToInt32(Criterio);
+                        ListaCompras = ComprasBLL.GetList(c => c.CompraId == id);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Ingrese un numero");
+                    }
+                }
+                else
+                {
+                    ListaCompras = ComprasBLL.GetList(c => true).OrderBy(c => c.CompraId).ToList();
+                }
+                break;
+            case "2": //UsuarioId
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        int usuarioId = Convert.ToInt32(Criterio);
+                        ListaCompras = ComprasBLL.GetList(c => c.UsuarioId == usuarioId);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Ingrese un numero");
+                    }
+                }
+                else
+                {
+                    ListaCompras = ComprasBLL.GetList(c => true).OrderBy(c => c.UsuarioId).ToList();
+                }
+                break;
+
+
+
+            case "3": //Monto
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        decimal monto = Convert.ToDecimal(Criterio);
+                        ListaCompras = ComprasBLL.GetList(c => c.Monto == monto);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Ingrese un numero");
+                    }
+                }
+                else
+                {
+                    ListaCompras = ComprasBLL.GetList(c => true).OrderBy(c => c.Monto).ToList();
+                }
+                break;
+
+
+
+        }
+
+
+
+        switch (FiltroFecha)
+        {
+            case "0": //Nada
+                break;
+            case "1": //Fecha
+                ListaCompras = ListaCompras.Where(s => s.Fecha >= Desde && s.Fecha <= Hasta).ToList();
+                break;
+
+
+
+        }
+
+
+
+        Filtro = "0";
+        FiltroFecha = "0";
+    }
+}

@@ -1,0 +1,275 @@
+﻿@page "/CFotografos"
+
+
+
+@using FotoStudio.Entidades
+@using FotoStudio.BLL
+
+
+
+@inject IToastService toast
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+
+<AuthorizeView>
+    <NotAuthorized>
+        <p class="h4 text-center">Usted no esta autorizado para acceder a esta pagina</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+
+
+
+    <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h1>Consulta de Fotografos</h1>
+            </div>
+
+
+
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+
+
+
+                        <div class="form-group">
+                            <label>Filtro</label>
+                            <select class="form-control" @bind="Filtro">
+                                <option value="0">Todo</option>
+                                <option value="1">Fotografo Id</option>
+                                <option value="2">Usuario Id</option>
+                                <option value="3">Nombres</option>
+                                <option value="4">Apellidos</option>
+                                <option value="5">Cedúla</option>
+                                <option value="6">Dirección</option>
+                                <option value="7">Teléfono</option>
+                                <option value="8">Celular</option>
+                                <option value="9">Sexo</option>
+                                <option value="10">Sueldo</option>
+
+
+
+
+                            </select>
+                        </div>
+                        &nbsp;
+                        <div class="form-group">
+                            <label>Criterio</label>
+                            <div class="input-group">
+                                <input type="text" @bind="Criterio" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary input-group-text" @onclick="@(u => Consultar(0))"><i class="oi oi-list-rich" /> Consultar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
+                        <table class="table table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Fotografo Id</th>
+                                    <th>Usuario Id</th>
+                                    <th>Nombre</th>
+                                    <th>Apellidos</th>
+                                    <th>Cedúla</th>
+                                    <th>Dirección</th>
+                                    <th>Teléfono</th>
+                                    <th>Celular</th>
+                                    <th>Sexo</th>
+                                    <th>Sueldo</th>
+                                    <th>Fecha de nacimiento</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                @foreach (var item in ListaFotografos)
+                                {
+                                    <tr>
+                                        <td>@item.FotografoId</td>
+                                        <td>@item.UsuarioId</td>
+                                        <td>@item.Nombres</td>
+                                        <td>@item.Apellidos</td>
+                                        <td>@item.Cedula</td>
+                                        <td>@item.Direccion</td>
+                                        <td>@item.Telefono</td>
+                                        <td>@item.Celular</td>
+                                        <td>@item.Sexo</td>
+                                        <td>@item.Sueldo</td>
+                                        <td>@item.FechaNacimiento</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+@code {
+    public List<Fotografos> ListaFotografos { get; set; }
+    private DateTime Desde { get; set; } = DateTime.Now;
+    private DateTime Hasta { get; set; } = DateTime.Now;
+
+
+
+    public string Criterio { get; set; }
+
+
+
+    public string Filtro { get; set; }
+    private string FiltroFecha { get; set; }
+
+
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+
+
+    private void Nuevo()
+    {
+        ListaFotografos = new List<Fotografos>();
+        Filtro = "0";
+        Criterio = string.Empty;
+    }
+
+
+
+    public void Consultar(int pag)
+    {
+        switch (Filtro)
+        {
+            case "0": //Todo
+                ListaFotografos = FotografosBLL.GetList(c => true);
+                break;
+            case "1": //FotogradoId
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        int id = Convert.ToInt32(Criterio);
+                        ListaFotografos = FotografosBLL.GetList(a => a.FotografoId == id);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Ingrese un numero");
+                    }
+                }
+                else
+                {
+                    ListaFotografos = FotografosBLL.GetList(c => true).OrderBy(c => c.FotografoId).ToList();
+                }
+                break;
+            case "2": //UsuarioId
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        int UsuarioId = Convert.ToInt32(Criterio);
+                        ListaFotografos = FotografosBLL.GetList(c => c.UsuarioId == UsuarioId);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Ingrese un numero");
+                    }
+                }
+                else
+                {
+                    ListaFotografos = FotografosBLL.GetList(c => true).OrderBy(c => c.UsuarioId).ToList();
+                }
+                break;
+
+
+
+            case "3": //Nombre
+                if (Criterio.Trim().Length > 0)
+                    ListaFotografos = FotografosBLL.GetList(c => c.Nombres.Contains(Criterio));
+                else
+                    ListaFotografos = FotografosBLL.GetList(c => true).OrderBy(c => c.Nombres).ToList();
+                break;
+            case "4": //Apellido
+                if (Criterio.Trim().Length > 0)
+                    ListaFotografos = FotografosBLL.GetList(c => c.Apellidos.Contains(Criterio));
+                else
+                    ListaFotografos = FotografosBLL.GetList(c => true).OrderBy(c => c.Apellidos).ToList();
+                break;
+            case "5": //Cedula
+                if (Criterio.Trim().Length > 0)
+                    ListaFotografos = FotografosBLL.GetList(c => c.Cedula.Contains(Criterio));
+                else
+                    ListaFotografos = FotografosBLL.GetList(c => true).OrderBy(c => c.Cedula).ToList();
+                break;
+            case "6": //Direccion
+                if (Criterio.Trim().Length > 0)
+                    ListaFotografos = FotografosBLL.GetList(c => c.Direccion.Contains(Criterio));
+                else
+                    ListaFotografos = FotografosBLL.GetList(c => true).OrderBy(c => c.Direccion).ToList();
+                break;
+            case "7": //Telefono
+                if (Criterio.Trim().Length > 0)
+                    ListaFotografos = FotografosBLL.GetList(c => c.Telefono.Contains(Criterio));
+                else
+                    ListaFotografos = FotografosBLL.GetList(c => true).OrderBy(c => c.Telefono).ToList();
+                break;
+            case "8": //celular
+                if (Criterio.Trim().Length > 0)
+                    ListaFotografos = FotografosBLL.GetList(c => c.Celular.Contains(Criterio));
+                else
+                    ListaFotografos = FotografosBLL.GetList(c => true).OrderBy(c => c.Celular).ToList();
+                break;
+            case "9": //Sexo
+                if (Criterio.Trim().Length > 0)
+                    ListaFotografos = FotografosBLL.GetList(c => c.Sexo.Contains(Criterio));
+                else
+                    ListaFotografos = FotografosBLL.GetList(c => true).OrderBy(c => c.Sexo).ToList();
+                break;
+            case "10": //Sueldo
+                try
+                {
+                    decimal Sueldo = Convert.ToDecimal(Criterio);
+                    ListaFotografos = FotografosBLL.GetList(a => a.Sueldo == Sueldo);
+                }
+                catch (FormatException)
+                {
+                    toast.ShowWarning("Ingrese un numero");
+                }
+                break;
+
+
+
+        }
+
+
+
+        switch (FiltroFecha)
+        {
+            case "0": //Nada
+                break;
+            case "1": //Fecha
+                ListaFotografos = ListaFotografos.Where(s => s.FechaNacimiento >= Desde && s.FechaNacimiento <= Hasta).ToList();
+                break;
+
+
+
+        }
+
+
+
+        Filtro = "0";
+
+
+
+    }
+}

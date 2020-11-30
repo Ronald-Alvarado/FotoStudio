@@ -1,0 +1,244 @@
+﻿@page "/CArticulos"
+
+
+
+@using FotoStudio.Entidades
+@using FotoStudio.BLL
+
+
+
+@inject IToastService toast
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+
+<AuthorizeView>
+    <NotAuthorized>
+        <p class="h4 text-center">Usted no esta autorizado para acceder a esta pagina</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+
+
+
+    <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h1>Consulta de Articulos</h1>
+            </div>
+
+
+
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+
+
+
+                        <div class="form-group">
+                            <label>Filtro</label>
+                            <select class="form-control" @bind="Filtro">
+                                <option value="0">Todo</option>
+                                <option value="1">Articulo Id</option>
+                                <option value="2">Usuario Id</option>
+                                <option value="3">Descripción</option>
+                                <option value="4">Categoria Id</option>
+                                <option value="5">Stock</option>
+                                <option value="6">Precio</option>
+                                <option value="7">Costo</option>
+                            </select>
+                        </div>
+                        &nbsp;
+                        <div class="form-group">
+                            <label>Criterio</label>
+                            <div class="input-group">
+                                <input type="text" @bind="Criterio" class="form-control">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary input-group-text" @onclick="@(u => Consultar())"><i class="oi oi-list-rich" /> Consultar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
+                        <table class="table table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Articulo Id</th>
+                                    <th>Usuario Id</th>
+                                    <th>Descripción</th>
+                                    <th>Categoria Id</th>
+                                    <th>Stock</th>
+                                    <th>Precio</th>
+                                    <th>Costo</th>
+
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white">
+                                @foreach (var item in ListaArticulos)
+                                {
+                                    <tr>
+                                        <td>@item.ArticuloId</td>
+                                        <td>@item.UsuarioId</td>
+                                        <td>@item.Descripcion</td>
+                                        <td>@item.CategoriaId</td>
+                                        <td>@item.Stock</td>
+                                        <td>@item.Precio</td>
+                                        <td>@item.Costo</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
+@code {
+    public List<Articulos> ListaArticulos { get; set; }
+
+
+
+    public string Criterio { get; set; }
+
+
+
+    public string Filtro { get; set; }
+
+
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+
+
+    private void Nuevo()
+    {
+        ListaArticulos = new List<Articulos>();
+        Filtro = "0";
+        Criterio = string.Empty;
+    }
+
+
+
+    public void Consultar()
+    {
+        switch (Filtro)
+        {
+            case "0": //Todo
+                ListaArticulos = ArticulosBLL.GetList(c => true);
+                break;
+            case "1": //ClienteId
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        int id = Convert.ToInt32(Criterio);
+                        ListaArticulos = ArticulosBLL.GetList(a => a.ArticuloId == id);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Ingrese un numero");
+                    }
+                }
+                else
+                {
+                    ListaArticulos = ArticulosBLL.GetList(a => true).OrderBy(a => a.ArticuloId).ToList();
+                }
+                break;
+            case "2": //UsuarioId
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        int usuarioId = Convert.ToInt32(Criterio);
+                        ListaArticulos = ArticulosBLL.GetList(a => a.UsuarioId == usuarioId);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Ingrese un numero");
+                    }
+                }
+                else
+                {
+                    ListaArticulos = ArticulosBLL.GetList(a => true).OrderBy(a => a.UsuarioId).ToList();
+                }
+                break;
+
+
+
+            case "3": //Descripcion
+                if (Criterio.Trim().Length > 0)
+                    ListaArticulos = ArticulosBLL.GetList(a => a.Descripcion.Contains(Criterio));
+                else
+                    ListaArticulos = ArticulosBLL.GetList(a => true).OrderBy(a => a.Descripcion).ToList();
+                break;
+            case "4": //Apellidos
+                try
+                {
+                    int categoriaId = Convert.ToInt32(Criterio);
+                    ListaArticulos = ArticulosBLL.GetList(a => a.CategoriaId == categoriaId);
+                }
+                catch (FormatException)
+                {
+                    toast.ShowWarning("Ingrese un numero");
+                }
+                break;
+            case "5": //Cedula
+                try
+                {
+                    int stock = Convert.ToInt32(Criterio);
+                    ListaArticulos = ArticulosBLL.GetList(a => a.Stock == stock);
+                }
+                catch (FormatException)
+                {
+                    toast.ShowWarning("Ingrese un numero");
+                }
+                break;
+            case "6": //Telefono
+                try
+                {
+                    decimal precio = Convert.ToDecimal(Criterio);
+                    ListaArticulos = ArticulosBLL.GetList(a => a.Precio == precio);
+                }
+                catch (FormatException)
+                {
+                    toast.ShowWarning("Ingrese un numero");
+                }
+                break;
+            case "7": //Celular
+                try
+                {
+                    decimal costo = Convert.ToDecimal(Criterio);
+                    ListaArticulos = ArticulosBLL.GetList(a => a.Costo == costo);
+                }
+                catch (FormatException)
+                {
+                    toast.ShowWarning("Ingrese un numero");
+                }
+                break;
+
+
+
+        }
+
+
+
+        Filtro = "0";
+
+
+
+    }
+}
