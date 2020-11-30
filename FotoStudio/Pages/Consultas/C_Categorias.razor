@@ -1,0 +1,150 @@
+﻿@page "/CCategorias"
+
+@using FotoStudio.Entidades
+@using FotoStudio.BLL
+
+@inject IToastService toast
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <NotAuthorized>
+        <p class="h4 text-center">Usted no esta autorizado para acceder a esta pagina</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+
+<div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h1>Consulta de Categorias</h1>
+        </div>
+
+        <div class="card-body">
+            <form>
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label>Filtro</label>
+                        <select class="form-control" @bind="Filtro">
+                            <option value="0">Todo</option>
+                            <option value="1">Categoria Id</option>
+                            <option value="2">Usuario Id</option>
+                            <option value="3">Nombre</option>
+
+                        </select>
+                    </div>
+                    &nbsp;
+                    <div class="form-group">
+                        <label>Criterio</label>
+                        <div class="input-group">
+                            <input type="text" @bind="Criterio" class="form-control">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary input-group-text" @onclick="@(u => Consultar())"><i class="oi oi-list-rich" /> Consultar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
+                    <table class="table table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Categoria Id</th>
+                                <th>Usuario Id</th>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            @foreach (var item in ListaCategorias)
+                            {
+                                <tr>
+                                    <td>@item.CategoriaId</td>
+                                    <td>@item.UsuarioId</td>
+                                    <td>@item.Nombre</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+}
+
+@code {
+    public List<Categoria> ListaCategorias { get; set; }
+
+    public string Criterio { get; set; }
+    public string Filtro { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+    private void Nuevo()
+    {
+        ListaCategorias = new List<Categoria>();
+        Filtro = "0";
+        Criterio = string.Empty;
+    }
+
+    public void Consultar()
+    {
+        switch (Filtro)
+        {
+            case "0": //Todo
+                ListaCategorias = CategoriaBLL.GetList(c => true);
+                break;
+            case "1": //ClienteId
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        int id = Convert.ToInt32(Criterio);
+                        ListaCategorias = CategoriaBLL.GetList(a => a.CategoriaId == id);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Ingrese un numero");
+                    }
+                }
+                else
+                {
+                    ListaCategorias = CategoriaBLL.GetList(c => true).OrderBy(c => c.CategoriaId).ToList();
+                }
+                break;
+            case "2": //UsuarioId
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        int usuarioId = Convert.ToInt32(Criterio);
+                        ListaCategorias = CategoriaBLL.GetList(c => c.UsuarioId == usuarioId);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Ingrese un numero");
+                    }
+                }
+                else
+                {
+                    ListaCategorias = CategoriaBLL.GetList(c => true).OrderBy(c => c.UsuarioId).ToList();
+                }
+                break;
+
+            case "3": //Descripcion
+                if (Criterio.Trim().Length > 0)
+                    ListaCategorias = CategoriaBLL.GetList(c => c.Nombre.Contains(Criterio));
+                else
+                    ListaCategorias = CategoriaBLL.GetList(c => true).OrderBy(c => c.Nombre).ToList();
+                break;
+        }
+
+        Filtro = "0";
+
+    }
+}

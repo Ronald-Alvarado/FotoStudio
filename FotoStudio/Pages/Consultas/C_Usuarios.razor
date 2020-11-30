@@ -1,0 +1,158 @@
+﻿@page "/CUsuarios"
+
+@using FotoStudio.Entidades
+@using FotoStudio.BLL
+
+@inject IToastService toast
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<AuthorizeView>
+    <NotAuthorized>
+        <p class="h4 text-center">Usted no esta autorizado para acceder a esta pagina</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
+{
+
+<div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <h1>Consulta de Usuarios</h1>
+        </div>
+
+        <div class="card-body">
+            <form>
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label>Filtro</label>
+                        <select class="form-control" @bind="Filtro">
+                            <option value="0">Todo</option>
+                            <option value="1">Usuario Id</option>
+                            <option value="2">Nombre</option>
+                            <option value="4">Nombre Usuario</option>
+                            <option value="4">Contrasena</option>
+                            <option value="5">Email</option>
+
+                        </select>
+                    </div>
+                    &nbsp;
+                    <div class="form-group">
+                        <label>Criterio</label>
+                        <div class="input-group">
+                            <input type="text" @bind="Criterio" class="form-control">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-primary input-group-text" @onclick="@(u => Consultar())"><i class="oi oi-list-rich" />Consultar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
+                    <table class="table table-striped">
+                        <thead class="thead-light">
+                            <tr>
+                                <th>Usuario Id</th>
+                                <th>Nombre</th>
+                                <th>Nombre Usuario</th>
+                                <th>Contraseña</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            @foreach (var item in ListaUsuarios)
+                            {
+                                <tr>
+                                    <td>@item.UsuarioId</td>
+                                    <td>@item.Nombres</td>
+                                    <td>@item.NombreUsuario</td>
+                                    <td>@item.Contrasena</td>
+                                    <td>@item.Email</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>    
+}
+
+    @code {
+public List<Usuario> ListaUsuarios { get; set; }
+
+    public string Criterio { get; set; }
+    public string Filtro { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+    }
+
+    private void Nuevo()
+    {
+        ListaUsuarios = new List<Usuario>();
+        Filtro = "0";
+        Criterio = string.Empty;
+    }
+
+    public void Consultar()
+    {
+        switch (Filtro)
+        {
+            case "0": //Todo
+                ListaUsuarios = UsuarioBLL.GetList(c => true);
+                break;
+            case "1": //UsuarioId
+                if (Criterio.Trim().Length > 0)
+                {
+                    try
+                    {
+                        int usuarioId = Convert.ToInt32(Criterio);
+                        ListaUsuarios = UsuarioBLL.GetList(c => c.UsuarioId == usuarioId);
+                    }
+                    catch (FormatException)
+                    {
+                        toast.ShowWarning("Ingrese un numero");
+                    }
+                }
+                else
+                {
+                    ListaUsuarios = UsuarioBLL.GetList(c => true).OrderBy(c => c.UsuarioId).ToList();
+                }
+                break;
+
+            case "2": //Nombres
+                if (Criterio.Trim().Length > 0)
+                    ListaUsuarios = UsuarioBLL.GetList(c => c.Nombres.Contains(Criterio));
+                else
+                    ListaUsuarios = UsuarioBLL.GetList(c => true).OrderBy(c => c.Nombres).ToList();
+                break;
+            case "3": //Nombre usuario
+                if (Criterio.Trim().Length > 0)
+                    ListaUsuarios = UsuarioBLL.GetList(c => c.NombreUsuario.Contains(Criterio));
+                else
+                    ListaUsuarios = UsuarioBLL.GetList(c => true).OrderBy(c => c.NombreUsuario).ToList();
+                break;
+            case "4": //Contrasena
+                if (Criterio.Trim().Length > 0)
+                    ListaUsuarios = UsuarioBLL.GetList(c => c.Contrasena.Contains(Criterio));
+                else
+                    ListaUsuarios = UsuarioBLL.GetList(c => true).OrderBy(c => c.Contrasena).ToList();
+                break;
+            case "6": //Descripcion
+                if (Criterio.Trim().Length > 0)
+                    ListaUsuarios = UsuarioBLL.GetList(c => c.Email.Contains(Criterio));
+                else
+                    ListaUsuarios = UsuarioBLL.GetList(c => true).OrderBy(c => c.Email).ToList();
+                break;
+
+        }
+
+        Filtro = "0";
+
+    }
+
+    }
