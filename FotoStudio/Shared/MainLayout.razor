@@ -11,14 +11,15 @@
                 InfoIcon="fa fa-info"
                 WarningIcon="fa fa-warning" />
 
-<div class="sidebar">
-    <NavMenu />
-</div>
-
 <div class="main">
-    <div class="top-row px-4">
-        <LogInControl/>
-    </div>
+    <div class="top auth">
+        <div class="input-group">
+            <NavMenu />
+            <LogInControl />
+        </div>     
+            
+        
+    </div>    
 
     <div class="content px-4">
         @Body
