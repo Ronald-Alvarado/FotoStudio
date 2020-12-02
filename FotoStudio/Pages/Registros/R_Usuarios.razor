@@ -6,67 +6,78 @@
 
 @inject IToastService Toast
 
-<EditForm Model="usuario" OnValidSubmit="Guardar">
-    <DataAnnotationsValidator />
-    <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h3>Registro de Usuarios</h3>
-            </div>
+    <EditForm Model="usuario" OnValidSubmit="Guardar">
+        <DataAnnotationsValidator />
 
-            <div class="card-body">
-                <div class="form-group">
-                    <label>UsuarioId</label>
-                    <div class="input-group">
-                        <InputNumber @bind-Value="usuario.UsuarioId" class="form-control" />
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-primary input-group-text oi-location" @onclick="Buscar">Buscar</button>
+        <div class="view" style="
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url('resources/fondo.jpg');
+        background-position: center;
+        width: auto;
+        height: 880px;">
+
+            <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Registro de Usuarios</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>UsuarioId</label>
+                            <div class="input-group">
+                                <InputNumber @bind-Value="usuario.UsuarioId" class="form-control" />
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary input-group-text oi-location" @onclick="Buscar">Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nombres</label>
+                            <InputText @bind-Value="usuario.Nombres" class="form-control" />
+                            <ValidationMessage For="@(() => usuario.Nombres)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nombre de Usuario</label>
+                            <InputText @bind-Value="usuario.NombreUsuario" class="form-control" />
+                            <ValidationMessage For="@(() => usuario.NombreUsuario)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <InputText @bind-Value="usuario.Contrasena" class="form-control" />
+                            <ValidationMessage For="@(() => usuario.Contrasena)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <InputText @bind-Value="usuario.Email" class="form-control" />
+                            <ValidationMessage For="@(() => usuario.Email)" />
+                        </div>
+
+                        <!--Buttons--->
+
+                        <div class="form-group text-center" display: inline-block>
+                            <div class="btn-group mr-5" role="group" aria-label="First group">
+                                <button type="button" class="btn btn-outline-secondary" @onclick="Nuevo">Nuevo</button>
+                            </div>
+                            <div class="btn-group mr-5" role="group" aria-label="Second group">
+                                <button type="submit" class="btn btn-outline-success">Guardar</button>
+                            </div>
+
+                            <div class="btn-group" role="group" aria-label="Third group">
+                                <button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label>Nombres</label>
-                    <InputText @bind-Value="usuario.Nombres" class="form-control" />
-                    <ValidationMessage For="@(() => usuario.Nombres)" />
-                </div>
-
-                <div class="form-group">
-                    <label>Nombre de Usuario</label>
-                    <InputText @bind-Value="usuario.NombreUsuario" class="form-control" />
-                    <ValidationMessage For="@(() => usuario.NombreUsuario)" />
-                </div>
-
-                <div class="form-group">
-                    <label>Contraseña</label>
-                    <InputText @bind-Value="usuario.Contrasena" class="form-control" />
-                    <ValidationMessage For="@(() => usuario.Contrasena)" />
-                </div>
-
-                <div class="form-group">
-                    <label>Email</label>
-                    <InputText @bind-Value="usuario.Email" class="form-control" />
-                    <ValidationMessage For="@(() => usuario.Email)" />
-                </div>
-
-                <!--Buttons--->
-
-                <div class="form-group text-center" display: inline-block>
-                    <div class="btn-group mr-5" role="group" aria-label="First group">
-                        <button type="button" class="btn btn-outline-secondary" @onclick="Nuevo">Nuevo</button>
-                    </div>
-                    <div class="btn-group mr-5" role="group" aria-label="Second group">
-                        <button type="submit" class="btn btn-outline-success">Guardar</button>
-                    </div>
-
-                    <div class="btn-group" role="group" aria-label="Third group">
-                        <button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
-                    </div>
-                </div>
             </div>
+
         </div>
-    </div>
-</EditForm>
+    </EditForm>
 
 @code{
     private Usuario usuario = new Usuario();

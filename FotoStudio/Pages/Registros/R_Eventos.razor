@@ -3,6 +3,7 @@
 
 @using FotoStudio.Entidades
 @using FotoStudio.BLL
+@using System.Security.Claims;
 
 @inject IToastService toast
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -19,96 +20,106 @@
 <EditForm Model="Evento" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
 
-    <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h3>Registro Eventos</h3>
-            </div>
-            <div class="card-body">
-                <form>
+    <div class="view" style="
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url('resources/fondo.jpg');
+        background-position: center;
+        width: auto;
+        height: 880px;">
+
+        <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Registro Eventos</h3>
+                </div>
+                <div class="card-body">
+                    <form>
 
 
-                    <div class="form-row align-items-center">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>Evento Id:</label>
-                                <div class="input-group">
-                                    <InputNumber @bind-Value="Evento.EventoId" class="form-control col-4" />
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
+                        <div class="form-row align-items-center">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Evento Id:</label>
+                                    <div class="input-group">
+                                        <InputNumber @bind-Value="Evento.EventoId" class="form-control col-4" />
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Usuario Id:</label>
-                        <InputNumber @bind-Value="Evento.UsuarioId" class="form-control" />
-                        <ValidationMessage For="@(() => Evento.UsuarioId)" />
-                    </div>
+                        <div class="form-group">
+                            <label>Usuario Id:</label>
+                            <InputNumber @bind-Value="Evento.UsuarioId" class="form-control" ReadOnly="true" />
+                            <ValidationMessage For="@(() => Evento.UsuarioId)" />
+                        </div>
 
-                    <div class="form-group">
-                        <label>Fotografo:</label>
-                        <select @bind="Evento.FotografoId" class="form-control">
-                            <option value="0" disabled selected>Elija un Fotografo</option>
-                            @foreach (var item in Lista)
-                            {
-                                <option value="@item.FotografoId">@item.Nombres</option>
-                            }
-                        </select>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label>Descripción:</label>
-                        <InputText @bind-Value="Evento.Descripcion" class="form-control" />
-                        <ValidationMessage For="@(() => Evento.Descripcion)" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Lugar:</label>
-                        <InputText @bind-Value="Evento.Lugar" class="form-control" />
-                        <ValidationMessage For="@(() => Evento.Lugar)" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Fecha Inicio:</label>
-                        <InputDate @bind-Value="Evento.FechaInicio" class="form-control" />
-                        <ValidationMessage For="@(() => Evento.FechaInicio)" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Fecha Fin:</label>
-                        <InputDate @bind-Value="Evento.FechaFin" class="form-control" />
-                        <ValidationMessage For="@(() => Evento.FechaFin)" />
-                    </div>
-
-                    <div class="form-group">
-                        <label>Precio:</label>
-                        <InputNumber @bind-Value="Evento.Precio" class="form-control" />
-                        <ValidationMessage For="@(() => Evento.Precio)" />
-                    </div>
+                        <div class="form-group">
+                            <label>Fotografo:</label>
+                            <select @bind="Evento.FotografoId" class="form-control">
+                                <option value="0" disabled selected>Elija un Fotografo</option>
+                                @foreach (var item in Lista)
+                                {
+                                    <option value="@item.FotografoId">@item.Nombres</option>
+                                }
+                            </select>
+                        </div>
 
 
-                </form>
-            </div>
+                        <div class="form-group">
+                            <label>Descripción:</label>
+                            <InputText @bind-Value="Evento.Descripcion" class="form-control" />
+                            <ValidationMessage For="@(() => Evento.Descripcion)" />
+                        </div>
 
-            <!--Buttons--->
+                        <div class="form-group">
+                            <label>Lugar:</label>
+                            <InputText @bind-Value="Evento.Lugar" class="form-control" />
+                            <ValidationMessage For="@(() => Evento.Lugar)" />
+                        </div>
 
-            <div class="form-group text-center" display: inline-block>
-                <div class="btn-group mr-5" role="group" aria-label="First group">
-                    <button type="button" class="btn btn-outline-secondary" @onclick="Nuevo">Nuevo</button>
-                </div>
-                <div class="btn-group mr-5" role="group" aria-label="Second group">
-                    <button type="submit" class="btn btn-outline-success">Guardar</button>
+                        <div class="form-group">
+                            <label>Fecha Inicio:</label>
+                            <InputDate @bind-Value="Evento.FechaInicio" class="form-control" />
+                            <ValidationMessage For="@(() => Evento.FechaInicio)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Fecha Fin:</label>
+                            <InputDate @bind-Value="Evento.FechaFin" class="form-control" />
+                            <ValidationMessage For="@(() => Evento.FechaFin)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Precio:</label>
+                            <InputNumber @bind-Value="Evento.Precio" class="form-control" />
+                            <ValidationMessage For="@(() => Evento.Precio)" />
+                        </div>
+
+
+                    </form>
                 </div>
 
-                <div class="btn-group" role="group" aria-label="Third group">
-                    <button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
+                <!--Buttons--->
+
+                <div class="form-group text-center" display: inline-block>
+                    <div class="btn-group mr-5" role="group" aria-label="First group">
+                        <button type="button" class="btn btn-outline-secondary" @onclick="Nuevo">Nuevo</button>
+                    </div>
+                    <div class="btn-group mr-5" role="group" aria-label="Second group">
+                        <button type="submit" class="btn btn-outline-success">Guardar</button>
+                    </div>
+
+                    <div class="btn-group" role="group" aria-label="Third group">
+                        <button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 
 
@@ -116,6 +127,11 @@
 }
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authState { get; set; }//UsuarioId
+
+    public string NombreUsuario { get; set; }
+    public string UsuarioId { get; set; }
 
     Eventos Evento = new Eventos();
 
@@ -127,10 +143,17 @@
     protected override void OnInitialized()
     {
         Nuevo();
+        Evento.UsuarioId = Convert.ToInt32(UsuarioId);
     }
 
-    private void Nuevo()
+    private async void Nuevo()
     {
+        NombreUsuario = (await authState).User.Identity.Name;
+
+        UsuarioId = (await authState).User.Claims
+            .Where(c => c.Type == ClaimTypes.NameIdentifier)
+            .Select(c => c.Value).FirstOrDefault();
+
         Evento = new Eventos();
         Lista = FotografosBLL.GetList(f => true);
     }

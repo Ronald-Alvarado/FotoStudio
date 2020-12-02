@@ -3,6 +3,7 @@
 
 @using FotoStudio.Entidades
 @using FotoStudio.BLL
+@using System.Security.Claims;
 
 @inject IToastService toast
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -17,8 +18,16 @@
 
 @if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
 {
-    <EditForm Model="Categoria" OnValidSubmit="Guardar">
-        <DataAnnotationsValidator />
+<EditForm Model="Categoria" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="view" style="
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url('resources/fondo.jpg');
+        background-position: center;
+        width: auto;
+        height: 880px;">
 
         <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
             <div class="card">
@@ -45,7 +54,7 @@
 
                         <div class="form-group">
                             <label>Usuario Id:</label>
-                            <InputNumber @bind-Value="Categoria.UsuarioId" class="form-control" />
+                            <InputNumber @bind-Value="Categoria.UsuarioId" class="form-control" readonly="true" />
                             <ValidationMessage For="@(() => Categoria.UsuarioId)" />
                         </div>
 
@@ -76,6 +85,8 @@
             </div>
         </div>
 
+    </div>
+
 
 
 </EditForm>
@@ -83,6 +94,11 @@
 
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authState { get; set; }
+    public string NombreUsuario { get; set; }
+    public string UsuarioId { get; set; }
+
     Categoria Categoria = new Categoria();
 
     [Parameter]
@@ -92,10 +108,17 @@
     protected override void OnInitialized()
     {
         Nuevo();
+        Categoria.UsuarioId = Convert.ToInt32(UsuarioId);
     }
 
-    private void Nuevo()
+    private async void Nuevo()
     {
+        NombreUsuario = (await authState).User.Identity.Name;
+
+        UsuarioId = (await authState).User.Claims
+            .Where(c => c.Type == ClaimTypes.NameIdentifier)
+            .Select(c => c.Value).FirstOrDefault();
+
         Categoria = new Categoria();
     }
 

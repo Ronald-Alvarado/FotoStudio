@@ -53,7 +53,7 @@ namespace FotoStudio.BLL
 
             try
             {
-                db.Database.ExecuteSqlRaw($"Delete FROM VentasDetalle Where VentasId={venta.VentaId}");
+                db.Database.ExecuteSqlRaw($"Delete FROM VentaDetalle Where VentaId={venta.VentaId}");
                 foreach (var item in venta.VentaDetalle)
                 {
                     db.Entry(item).State = EntityState.Added;

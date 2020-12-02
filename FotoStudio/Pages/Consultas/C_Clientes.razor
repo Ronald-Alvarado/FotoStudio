@@ -69,7 +69,7 @@
                         <div class="input-group">
                             <input type="text" @bind="Criterio" class="form-control">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-primary input-group-text" @onclick="@(u => Consultar())"><i class="oi oi-list-rich" /> Consultar</button>
+                                <button type="button" class="btn btn-primary input-group-text" @onclick="@(u => Consultar(Pages))"><i class="oi oi-list-rich" /> Consultar</button>
                             </div>
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white">
-                            @foreach (var item in ListaClientes)
+                            @foreach (var item in auxListaClientes)
                             {
                                 <tr>
                                     <td>@item.ClienteId</td>
@@ -108,6 +108,29 @@
                             }
                         </tbody>
                     </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+
+                            <li class="page-item">
+                                <a class="page-link" @onclick="@(e => NavegateTo("back"))" tabindex="-1">Back</a>
+                            </li>
+
+                            @for (int i = 0; i < Pages; i++)
+                            {
+                                var NumeroPagina = i;
+                                <li class="page-item">
+                                    <a class="@(CurrentPage == NumeroPagina ? "page-link btn btn-dark" : "page-link btn btn-danger")"
+                                       @onclick="@(u => Consultar(Convert.ToDecimal(NumeroPagina)))">
+                                        @(i + 1)
+                                    </a>
+                                </li>
+                            }
+
+                            <li class="page-item">
+                                <a class="page-link" @onclick="@(e => NavegateTo("next"))" tabindex="-1">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </form>
         </div>
@@ -116,122 +139,150 @@
 }
 
     @code {
-public List<Cliente> ListaClientes { get; set; }
+        public List<Cliente> ListaClientes { get; set; }
+        public List<Cliente> auxListaClientes { get; set; }
 
-    private DateTime Desde { get; set; } = DateTime.Now;
-    private DateTime Hasta { get; set; } = DateTime.Now;
+        private DateTime Desde { get; set; } = DateTime.Now;
+        private DateTime Hasta { get; set; } = DateTime.Now;
 
-    public string Filtro { get; set; }
-    private string FiltroFecha { get; set; }
+        public string Filtro { get; set; }
+        private string FiltroFecha { get; set; }
 
-    public string Criterio { get; set; }
+        public string Criterio { get; set; }
 
-    protected override void OnInitialized()
-    {
-        Nuevo();
-    }
-
-    private void Nuevo()
-    {
-        ListaClientes = new List<Cliente>();
-        Filtro = "0";
-        Criterio = string.Empty;
-    }
-
-    public void Consultar()
-    {
-        switch (Filtro)
+        protected override void OnInitialized()
         {
-            case "0": //Todo
-                ListaClientes = ClienteBLL.GetList(c => true);
-                break;
-            case "1": //ClienteId
-                if (Criterio.Trim().Length > 0)
-                {
-                    try
-                    {
-                        int id = Convert.ToInt32(Criterio);
-                        ListaClientes = ClienteBLL.GetList(c => c.ClienteId == id);
-                    }
-                    catch (FormatException)
-                    {
-                        toast.ShowWarning("Ingrese un numero");
-                    }
-                }
-                else
-                {
-                    ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.ClienteId).ToList();
-                }
-                break;
-            case "2": //UsuarioId
-                if (Criterio.Trim().Length > 0)
-                {
-                    try
-                    {
-                        int usuarioId = Convert.ToInt32(Criterio);
-                        ListaClientes = ClienteBLL.GetList(c => c.UsuarioId == usuarioId);
-                    }
-                    catch (FormatException)
-                    {
-                        toast.ShowWarning("Ingrese un numero");
-                    }
-                }
-                else
-                {
-                    ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.UsuarioId).ToList();
-                }
-                break;
-
-            case "3": //Nombres
-                if (Criterio.Trim().Length > 0)
-                    ListaClientes = ClienteBLL.GetList(c => c.Nombres.Contains(Criterio));
-                else
-                    ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Nombres).ToList();
-                break;
-            case "4": //Apellidos
-                if (Criterio.Trim().Length > 0)
-                    ListaClientes = ClienteBLL.GetList(c => c.Apellidos.Contains(Criterio));
-                else
-                    ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Apellidos).ToList();
-                break;
-            case "5": //Cedula
-                if (Criterio.Trim().Length > 0)
-                    ListaClientes = ClienteBLL.GetList(c => c.Cedula.Contains(Criterio));
-                else
-                    ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Cedula).ToList();
-                break;
-            case "6": //Telefono
-                if (Criterio.Trim().Length > 0)
-                    ListaClientes = ClienteBLL.GetList(c => c.Telefono.Contains(Criterio));
-                else
-                    ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Telefono).ToList();
-                break;
-            case "7": //Celular
-                if (Criterio.Trim().Length > 0)
-                    ListaClientes = ClienteBLL.GetList(c => c.Celular.Contains(Criterio));
-                else
-                    ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Celular).ToList();
-                break;
-            case "8": //Direccion
-                if (Criterio.Trim().Length > 0)
-                    ListaClientes = ClienteBLL.GetList(c => c.Direccion.Contains(Criterio));
-                else
-                    ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Direccion).ToList();
-                break;
+            Nuevo();
         }
 
-        switch (FiltroFecha)
+        private void Nuevo()
         {
-            case "0": //Nada
-                break;
-            case "1": //Fecha
-                ListaClientes = ListaClientes.Where(s => s.FechaNacimiento >= Desde && s.FechaNacimiento <= Hasta).ToList();
-                break;
-
+            ListaClientes = new List<Cliente>();
+            auxListaClientes = new List<Cliente>();
+            Filtro = "0";
+            Criterio = string.Empty;
         }
 
-        Filtro = "0";
-        FiltroFecha = "0";
-    }
+        private int RegistrosPaginas = 1;
+        private decimal TotalRegistros, Pages, CurrentPage;
+
+        public void Consultar(decimal pages)
+        {
+            switch (Filtro)
+            {
+                case "0": //Todo
+                    ListaClientes = ClienteBLL.GetList(c => true);
+                    break;
+                case "1": //ClienteId
+                    if (Criterio.Trim().Length > 0)
+                    {
+                        try
+                        {
+                            int id = Convert.ToInt32(Criterio);
+                            ListaClientes = ClienteBLL.GetList(c => c.ClienteId == id);
+                        }
+                        catch (FormatException)
+                        {
+                            toast.ShowWarning("Ingrese un numero");
+                        }
+                    }
+                    else
+                    {
+                        ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.ClienteId).ToList();
+                    }
+                    break;
+                case "2": //UsuarioId
+                    if (Criterio.Trim().Length > 0)
+                    {
+                        try
+                        {
+                            int usuarioId = Convert.ToInt32(Criterio);
+                            ListaClientes = ClienteBLL.GetList(c => c.UsuarioId == usuarioId);
+                        }
+                        catch (FormatException)
+                        {
+                            toast.ShowWarning("Ingrese un numero");
+                        }
+                    }
+                    else
+                    {
+                        ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.UsuarioId).ToList();
+                    }
+                    break;
+
+                case "3": //Nombres
+                    if (Criterio.Trim().Length > 0)
+                        ListaClientes = ClienteBLL.GetList(c => c.Nombres.Contains(Criterio));
+                    else
+                        ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Nombres).ToList();
+                    break;
+                case "4": //Apellidos
+                    if (Criterio.Trim().Length > 0)
+                        ListaClientes = ClienteBLL.GetList(c => c.Apellidos.Contains(Criterio));
+                    else
+                        ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Apellidos).ToList();
+                    break;
+                case "5": //Cedula
+                    if (Criterio.Trim().Length > 0)
+                        ListaClientes = ClienteBLL.GetList(c => c.Cedula.Contains(Criterio));
+                    else
+                        ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Cedula).ToList();
+                    break;
+                case "6": //Telefono
+                    if (Criterio.Trim().Length > 0)
+                        ListaClientes = ClienteBLL.GetList(c => c.Telefono.Contains(Criterio));
+                    else
+                        ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Telefono).ToList();
+                    break;
+                case "7": //Celular
+                    if (Criterio.Trim().Length > 0)
+                        ListaClientes = ClienteBLL.GetList(c => c.Celular.Contains(Criterio));
+                    else
+                        ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Celular).ToList();
+                    break;
+                case "8": //Direccion
+                    if (Criterio.Trim().Length > 0)
+                        ListaClientes = ClienteBLL.GetList(c => c.Direccion.Contains(Criterio));
+                    else
+                        ListaClientes = ClienteBLL.GetList(c => true).OrderBy(c => c.Direccion).ToList();
+                    break;
+            }
+
+            switch (FiltroFecha)
+            {
+                case "0": //Nada
+                    break;
+                case "1": //Fecha
+                    ListaClientes = ListaClientes.Where(s => s.FechaNacimiento >= Desde && s.FechaNacimiento <= Hasta).ToList();
+                    break;
+
+            }
+            TotalRegistros = ListaClientes.Count();
+
+            Pages = Math.Ceiling(TotalRegistros / RegistrosPaginas);
+
+            ActualizarLista(pages);
+        }
+
+        private void ActualizarLista(decimal NumeroPagina)
+        {
+            auxListaClientes = ListaClientes.Skip(Convert.ToInt32(NumeroPagina) * RegistrosPaginas).Take(RegistrosPaginas).ToList();
+            CurrentPage = NumeroPagina;
+        }
+
+        private void NavegateTo(string direccion)
+        {
+            if (direccion == "back" && CurrentPage != 0)
+            {
+                CurrentPage -= 1;
+            }
+
+            if (direccion == "next" && CurrentPage != Pages - 1)
+            {
+                CurrentPage += 1;
+            }
+
+            ActualizarLista(CurrentPage);
+        }
 
     }

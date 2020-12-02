@@ -41,7 +41,7 @@
                         <div class="input-group">
                             <input type="text" @bind="Criterio" class="form-control">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-primary input-group-text" @onclick="@(u => Consultar())"><i class="oi oi-list-rich" /> Consultar</button>
+                                <button type="button" class="btn btn-primary input-group-text" @onclick="@(u => Consultar(Pages))"><i class="oi oi-list-rich" /> Consultar</button>
                             </div>
                         </div>
                     </div>
@@ -57,7 +57,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white">
-                            @foreach (var item in ListaCategorias)
+                            @foreach (var item in auxListaCategorias)
                             {
                                 <tr>
                                     <td>@item.CategoriaId</td>
@@ -67,6 +67,29 @@
                             }
                         </tbody>
                     </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+
+                            <li class="page-item">
+                                <a class="page-link" @onclick="@(e => NavegateTo("back"))" tabindex="-1">Back</a>
+                            </li>
+
+                            @for (int i = 0; i < Pages; i++)
+                            {
+                                var NumeroPagina = i;
+                                <li class="page-item">
+                                    <a class="@(CurrentPage == NumeroPagina ? "page-link btn btn-dark" : "page-link btn btn-danger")"
+                                       @onclick="@(u => Consultar(Convert.ToDecimal(NumeroPagina)))">
+                                        @(i + 1)
+                                    </a>
+                                </li>
+                            }
+
+                            <li class="page-item">
+                                <a class="page-link" @onclick="@(e => NavegateTo("next"))" tabindex="-1">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </form>
         </div>
@@ -76,6 +99,7 @@
 
 @code {
     public List<Categoria> ListaCategorias { get; set; }
+    public List<Categoria> auxListaCategorias { get; set; }
 
     public string Criterio { get; set; }
     public string Filtro { get; set; }
@@ -88,11 +112,15 @@
     private void Nuevo()
     {
         ListaCategorias = new List<Categoria>();
+        auxListaCategorias = new List<Categoria>();
         Filtro = "0";
         Criterio = string.Empty;
     }
 
-    public void Consultar()
+    private int RegistrosPaginas = 1;
+    private decimal TotalRegistros, Pages, CurrentPage;
+
+    public void Consultar(decimal pages)
     {
         switch (Filtro)
         {
@@ -144,7 +172,34 @@
                 break;
         }
 
+        TotalRegistros = ListaCategorias.Count();
+
+        Pages = Math.Ceiling(TotalRegistros / RegistrosPaginas);
+
+        ActualizarLista(pages);
+
         Filtro = "0";
 
+    }
+
+    private void ActualizarLista(decimal NumeroPagina)
+    {
+        auxListaCategorias = ListaCategorias.Skip(Convert.ToInt32(NumeroPagina) * RegistrosPaginas).Take(RegistrosPaginas).ToList();
+        CurrentPage = NumeroPagina;
+    }
+
+    private void NavegateTo(string direccion)
+    {
+        if (direccion == "back" && CurrentPage != 0)
+        {
+            CurrentPage -= 1;
+        }
+
+        if (direccion == "next" && CurrentPage != Pages - 1)
+        {
+            CurrentPage += 1;
+        }
+
+        ActualizarLista(CurrentPage);
     }
 }

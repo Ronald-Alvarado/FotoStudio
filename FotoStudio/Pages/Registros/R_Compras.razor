@@ -3,6 +3,7 @@
 
 @using FotoStudio.Entidades
 @using FotoStudio.BLL
+@using System.Security.Claims;
 
 
 @inject IToastService toast
@@ -20,134 +21,148 @@
 <EditForm Model="Compra" OnValidSubmit="Guardar">
     <DataAnnotationsValidator />
 
-    <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h3>Registro Compras</h3>
-            </div>
-            <div class="card-body">
-                <form>
+    <div class="view" style="
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url('resources/fondo.jpg');
+        background-position: center;
+        width: auto;
+        height: 880px;">
+
+        <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Registro Compras</h3>
+                </div>
+                <div class="card-body">
+                    <form>
 
 
-                    <div class="form-row align-items-center">
-                        <div class="col">
-                            <div class="form-group">
-                                <label>Id Compra:</label>
-                                <div class="input-group">
-                                    <InputNumber @bind-Value="Compra.CompraId" class="form-control col-4" />
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
+                        <div class="form-row align-items-center">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Id Compra:</label>
+                                    <div class="input-group">
+                                        <InputNumber @bind-Value="Compra.CompraId" class="form-control col-4" />
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label>Usuario Id:</label>
-                        <InputNumber @bind-Value="Compra.UsuarioId" class="form-control" />
-                        <ValidationMessage For="@(() => Compra.UsuarioId)" />
-                    </div>
+                        <div class="form-group">
+                            <label>Usuario Id:</label>
+                            <InputNumber @bind-Value="Compra.UsuarioId" class="form-control" ReadOnly="true" />
+                            <ValidationMessage For="@(() => Compra.UsuarioId)" />
+                        </div>
 
-                    <div class="form-group">
-                        <label>Fecha:</label>
-                        <InputDate @bind-Value="Compra.Fecha" class="form-control" />
-                        <ValidationMessage For="@(() => Compra.Fecha)" />
-                    </div>
+                        <div class="form-group">
+                            <label>Fecha:</label>
+                            <InputDate @bind-Value="Compra.Fecha" class="form-control" />
+                            <ValidationMessage For="@(() => Compra.Fecha)" />
+                        </div>
 
-                    <div class="form-group">
-                        <div class="form-row">
-                            @*Articulo*@
-                            <div class="col">
-                                <label>Articulo:</label>
-                                <select class="form-control" @bind="ArticuloSeleccionado">
-                                    <option value="" disabled selected>Seleccione un Articulo</option>
-                                    @foreach (var item in Lista)
-                                    {
-                                        <option value="@item.ArticuloId">@item.Descripcion</option>
-                                    }
-                                </select>
-                            </div>
-
-
-                            <div class="col">
-                                <label>Costo</label>
-                                <InputNumber class="form-control" @bind-Value="costo" />
-                            </div>
+                        <div class="form-group">
+                            <div class="form-row">
+                                @*Articulo*@
+                                <div class="col">
+                                    <label>Articulo:</label>
+                                    <select class="form-control" @bind="ArticuloSeleccionado">
+                                        <option value="" disabled selected>Seleccione un Articulo</option>
+                                        @foreach (var item in Lista)
+                                        {
+                                            <option value="@item.ArticuloId">@item.Descripcion</option>
+                                        }
+                                    </select>
+                                </div>
 
 
-                            <div class="col">
-                                <label>Cantidad:</label>
-                                <div class="input-group">
-                                    <InputNumber @bind-Value="Cantidad" class="form-control" />
-                                    <div class="input-group-append">
-                                        <button type="button" class="btn btn-info" @onclick="Agregar">Agregar</button>
+                                <div class="col">
+                                    <label>Costo</label>
+                                    <InputNumber class="form-control" @bind-Value="costo" />
+                                </div>
+
+
+                                <div class="col">
+                                    <label>Cantidad:</label>
+                                    <div class="input-group">
+                                        <InputNumber @bind-Value="Cantidad" class="form-control" />
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-info" @onclick="Agregar">Agregar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
 
-                    @*Detalle*@
-                    @*La Tabla*@
-                    <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
-                        <table class="table table-striped">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Articulo Id</th>
-                                    <th>Descripción</th>
-                                    <th>Cantidad</th>
-                                    <th>Costo</th>
-
-                                </tr>
-                            </thead>
-                            @*Asignacion de los datos del Detalle*@
-                            <tbody class="bg-light">
-                                @foreach (var item in Compra.ComprasDetalle)
-                                {
+                        @*Detalle*@
+                        @*La Tabla*@
+                        <div class="table-responsive text-nowrap" style="position: relative; height:200px; overflow: auto; display: block;">
+                            <table class="table table-striped">
+                                <thead class="thead-light">
                                     <tr>
-                                        <td>@item.ArticuloId</td>
-                                        <td>@ObtenerDescripcion(item.ArticuloId)</td>
-                                        <td>@item.CantidadArticulos</td>
-                                        <td>@item.Costo</td>
+                                        <th>Articulo Id</th>
+                                        <th>Descripción</th>
+                                        <th>Cantidad</th>
+                                        <th>Costo</th>
 
-                                        <td><button type="button" class="btn btn-outline-danger" @onclick="(() => EliminarDetalle(item))"> Remover</button></td>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                @*Asignacion de los datos del Detalle*@
+                                <tbody class="bg-light">
+                                    @foreach (var item in Compra.ComprasDetalle)
+                                    {
+                                        <tr>
+                                            <td>@item.ArticuloId</td>
+                                            <td>@ObtenerDescripcion(item.ArticuloId)</td>
+                                            <td>@item.CantidadArticulos</td>
+                                            <td>@item.Costo</td>
+
+                                            <td><button type="button" class="btn btn-outline-danger" @onclick="(() => EliminarDetalle(item))"> Remover</button></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Monto:</label>
+                            <InputNumber @bind-Value="Compra.Monto" class="form-control" readonly="true" />
+                            <ValidationMessage For="@(() => Compra.Monto)" />
+                        </div>
+
+                    </form>
+                </div>
+
+                <!--Buttons--->
+
+                <div class="form-group text-center" display: inline-block>
+                    <div class="btn-group mr-5" role="group" aria-label="First group">
+                        <button type="button" class="btn btn-outline-secondary" @onclick="Nuevo">Nuevo</button>
+                    </div>
+                    <div class="btn-group mr-5" role="group" aria-label="Second group">
+                        <button type="submit" class="btn btn-outline-success">Guardar</button>
                     </div>
 
-                    <div class="form-group">
-                        <label>Monto:</label>
-                        <InputNumber @bind-Value="Compra.Monto" class="form-control" readonly="true" />
-                        <ValidationMessage For="@(() => Compra.Monto)" />
+                    <div class="btn-group" role="group" aria-label="Third group">
+                        <button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
                     </div>
-
-                </form>
-            </div>
-
-            <!--Buttons--->
-
-            <div class="form-group text-center" display: inline-block>
-                <div class="btn-group mr-5" role="group" aria-label="First group">
-                    <button type="button" class="btn btn-outline-secondary" @onclick="Nuevo">Nuevo</button>
-                </div>
-                <div class="btn-group mr-5" role="group" aria-label="Second group">
-                    <button type="submit" class="btn btn-outline-success">Guardar</button>
-                </div>
-
-                <div class="btn-group" role="group" aria-label="Third group">
-                    <button type="button" class="btn btn-outline-danger" @onclick="Eliminar">Eliminar</button>
                 </div>
             </div>
         </div>
-        </div>
+    </div>
 </EditForm>
 }
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authState { get; set; }//UsuarioId
+
+    public string NombreUsuario { get; set; }
+    public string UsuarioId { get; set; }
 
     Compras Compra = new Compras();
     ComprasDetalle CompraD = new ComprasDetalle();
@@ -164,7 +179,7 @@
     protected override void OnInitialized()
     {
         Nuevo();
-
+        Compra.UsuarioId = Convert.ToInt32(UsuarioId);
 
     }
 
@@ -177,8 +192,14 @@
         return Descripcion;
     }
 
-    private void Nuevo()
+    private async void Nuevo()
     {
+        NombreUsuario = (await authState).User.Identity.Name;
+
+        UsuarioId = (await authState).User.Claims
+            .Where(c => c.Type == ClaimTypes.NameIdentifier)
+            .Select(c => c.Value).FirstOrDefault();
+
         Compra = new Compras();
         Cantidad = 0;
         costo = 0;

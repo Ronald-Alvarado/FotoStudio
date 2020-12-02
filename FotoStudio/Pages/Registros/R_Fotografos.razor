@@ -3,6 +3,7 @@
 
 @using FotoStudio.Entidades
 @using FotoStudio.BLL
+@using System.Security.Claims;
 
 
 @inject IToastService toast
@@ -17,8 +18,16 @@
 
 @if (AuthenticationStateProvider.GetAuthenticationStateAsync().Result.User.Identity.IsAuthenticated)
 {
-    <EditForm Model="Fotografo" OnValidSubmit="Guardar">
-        <DataAnnotationsValidator />
+<EditForm Model="Fotografo" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+
+    <div class="view" style="
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url('resources/fondo.jpg');
+        background-position: center;
+        width: auto;
+        height: 880px;">
 
         <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
             <div class="card">
@@ -43,7 +52,7 @@
 
                         <div class="form-group">
                             <label>Usuario Id:</label>
-                            <InputNumber @bind-Value="Fotografo.UsuarioId" class="form-control" />
+                            <InputNumber @bind-Value="Fotografo.UsuarioId" class="form-control" ReadOnly="true" />
                             <ValidationMessage For="@(() => Fotografo.UsuarioId)" />
                         </div>
 
@@ -127,12 +136,17 @@
 
         </div>
 
+    </div>
 
-
-    </EditForm>
+</EditForm>
 }
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> authState { get; set; }//UsuarioId
+
+    public string NombreUsuario { get; set; }
+    public string UsuarioId { get; set; }
 
     Fotografos Fotografo = new Fotografos();
 
@@ -144,10 +158,17 @@
     protected override void OnInitialized()
     {
         Nuevo();
+        Fotografo.UsuarioId = Convert.ToInt32(UsuarioId);
     }
 
-    private void Nuevo()
+    private async void Nuevo()
     {
+        NombreUsuario = (await authState).User.Identity.Name;
+
+        UsuarioId = (await authState).User.Claims
+            .Where(c => c.Type == ClaimTypes.NameIdentifier)
+            .Select(c => c.Value).FirstOrDefault();
+
         Fotografo = new Fotografos();
     }
 
