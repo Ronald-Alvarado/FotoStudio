@@ -23,7 +23,8 @@ namespace FotoStudio.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite(@"Data source= Data/FotoStudio.db");
+            //optionsBuilder.UseSqlite(@"Data source= Data/FotoStudio.db");
+            optionsBuilder.UseSqlite(@"Data source = ../FotoStudioTests/Data/FotoStudio.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
