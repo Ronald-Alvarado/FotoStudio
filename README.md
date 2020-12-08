@@ -4,7 +4,7 @@
 <img width="881" alt="diagrama" src="https://user-images.githubusercontent.com/59875640/101432052-862e2b80-38de-11eb-8116-513168afb9fd.png">
 
 ### Login
-#### El Usuario Predeterminado es Admin y la clave es Admin
+#### El Usuario Predeterminado es admin y la clave es admin
 ![WhatsApp Image 2020-12-07 at 10 53 58 PM](https://user-images.githubusercontent.com/59875640/101432746-cc37bf00-38df-11eb-8eed-64803abf696a.jpeg)
 
 
