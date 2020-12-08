@@ -139,7 +139,7 @@
     protected override void OnInitialized()
     {
         Nuevo();
-        Articulo.UsuarioId = Convert.ToInt32(UsuarioId);//UsuarioId
+
         Lista = CategoriaBLL.GetList(c => true);
     }
 
@@ -160,6 +160,8 @@
             .Select(c => c.Value).FirstOrDefault();
 
         Articulo = new Articulos();
+
+        Articulo.UsuarioId = Convert.ToInt32(UsuarioId);//UsuarioId
     }
 
     private void Guardar()

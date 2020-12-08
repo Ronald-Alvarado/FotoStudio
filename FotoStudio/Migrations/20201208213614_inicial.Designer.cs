@@ -9,14 +9,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FotoStudio.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20201129122756_inicial")]
+    [Migration("20201208213614_inicial")]
     partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.10");
+                .HasAnnotation("ProductVersion", "5.0.1");
 
             modelBuilder.Entity("FotoStudio.Entidades.Articulos", b =>
                 {
@@ -32,8 +32,8 @@ namespace FotoStudio.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(40);
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
 
                     b.Property<decimal>("Precio")
                         .HasColumnType("TEXT");
@@ -56,6 +56,7 @@ namespace FotoStudio.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Nombre")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UsuarioId")
@@ -73,12 +74,15 @@ namespace FotoStudio.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Apellidos")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Cedula")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Celular")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Direccion")
@@ -89,6 +93,7 @@ namespace FotoStudio.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombres")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Sexo")
@@ -96,6 +101,7 @@ namespace FotoStudio.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Telefono")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UsuarioId")
@@ -149,8 +155,8 @@ namespace FotoStudio.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(40);
+                        .HasMaxLength(40)
+                        .HasColumnType("TEXT");
 
                     b.HasKey("ComprasDetalleId");
 
@@ -169,8 +175,8 @@ namespace FotoStudio.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
 
                     b.Property<DateTime>("FechaFin")
                         .HasColumnType("TEXT");
@@ -203,15 +209,17 @@ namespace FotoStudio.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Apellidos")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Cedula")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Celular")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(10);
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
@@ -221,6 +229,7 @@ namespace FotoStudio.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombres")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Sexo")
@@ -231,6 +240,7 @@ namespace FotoStudio.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Telefono")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("UsuarioId")
@@ -257,10 +267,11 @@ namespace FotoStudio.Migrations
 
                     b.Property<string>("NombreUsuario")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Nombres")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.HasKey("UsuarioId");
@@ -285,6 +296,7 @@ namespace FotoStudio.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Apellidos")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ClienteId")
@@ -294,6 +306,7 @@ namespace FotoStudio.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Nombres")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Total")
@@ -321,8 +334,8 @@ namespace FotoStudio.Migrations
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("EventoId")
                         .HasColumnType("INTEGER");
@@ -380,6 +393,28 @@ namespace FotoStudio.Migrations
                         .HasForeignKey("VentaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("FotoStudio.Entidades.Articulos", b =>
+                {
+                    b.Navigation("ComprasDetalle");
+
+                    b.Navigation("VentasDetalle");
+                });
+
+            modelBuilder.Entity("FotoStudio.Entidades.Compras", b =>
+                {
+                    b.Navigation("ComprasDetalle");
+                });
+
+            modelBuilder.Entity("FotoStudio.Entidades.Eventos", b =>
+                {
+                    b.Navigation("VentasDetalle");
+                });
+
+            modelBuilder.Entity("FotoStudio.Entidades.Venta", b =>
+                {
+                    b.Navigation("VentaDetalle");
                 });
 #pragma warning restore 612, 618
         }

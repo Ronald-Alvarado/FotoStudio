@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FotoStudio.Validaciones;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,9 +10,7 @@ namespace FotoStudio.Entidades
 {
     public class Eventos
     {
-        [Key]
-        
-        public int EventoId { get; set; }
+        [Key] [ValidarId] public int EventoId { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio.")]
         [Range(minimum: 1, maximum: 200000000, ErrorMessage = "El rango de este campo debe ser mayor a 0.")]
@@ -36,7 +35,8 @@ namespace FotoStudio.Entidades
         public DateTime FechaFin { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C}")]
-        public decimal Precio { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio.")]
+        [ValidarPrecio] public decimal Precio { get; set; }
 
         [ForeignKey("EventoId")]
         public List<VentaDetalle> VentasDetalle { get; set; }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FotoStudio.Validaciones;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,19 +9,24 @@ namespace FotoStudio.Entidades
 {
     public class Cliente
     {
-        [Key] public int ClienteId { get; set; }
+        [Key] [ValidarId] public int ClienteId { get; set; }
 
         [Range(1, 100000, ErrorMessage = "Este campo debe tener un rango mayor a 0.")]
         [Required(ErrorMessage = "Este campo no puede estar vacio.")]
         public int UsuarioId { get; set; }
-        public string Nombres { get; set; }
-        public string Apellidos { get; set; }
-        public string Cedula { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio.")]
+        [ValidarNombre] public string Nombres { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio.")]
+        [ValidarApellidos] public string Apellidos { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio.")]
+        [ValidarCedula] public string Cedula { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio.")]
         public string Direccion { get; set; }
-        public string Telefono { get; set; }
-        public string Celular { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio.")]
+        [ValidarTelefono] public string Telefono { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio.")]
+        [ValidarTelefono] public string Celular { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio.")]
         public string Sexo { get; set; }

@@ -31,8 +31,6 @@ namespace FotoStudio.BLL
 
             try
             {
-
-
                 if (db.Compras.Add(compras) != null)
                 {
                     paso = (db.SaveChanges() > 0);

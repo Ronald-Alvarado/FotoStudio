@@ -158,7 +158,7 @@
     protected override void OnInitialized()
     {
         Nuevo();
-        Fotografo.UsuarioId = Convert.ToInt32(UsuarioId);
+
     }
 
     private async void Nuevo()
@@ -170,6 +170,8 @@
             .Select(c => c.Value).FirstOrDefault();
 
         Fotografo = new Fotografos();
+
+        Fotografo.UsuarioId = Convert.ToInt32(UsuarioId);
     }
 
     private void Guardar()

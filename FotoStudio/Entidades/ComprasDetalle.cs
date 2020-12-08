@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FotoStudio.Validaciones;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,8 +9,7 @@ namespace FotoStudio.Entidades
 {
     public class ComprasDetalle
     {
-        [Key]
-        public int ComprasDetalleId { get; set; }
+        [Key] [ValidarId] public int ComprasDetalleId { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio.")]
         public int CompraId { get; set; }
@@ -24,10 +24,12 @@ namespace FotoStudio.Entidades
         public string Descripcion { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C}")]
-        public int CantidadArticulos { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio.")]
+        [ValidarCantidad] public int CantidadArticulos { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:C}")]
-        public decimal Costo { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio.")]
+        [ValidarPrecio] public decimal Costo { get; set; }
 
 
 

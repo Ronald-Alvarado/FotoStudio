@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FotoStudio.Validaciones;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,9 +10,7 @@ namespace FotoStudio.Entidades
 {
     public class Compras
     {
-        [Key]
-        
-        public int CompraId { get; set; }
+        [Key] [ValidarId] public int CompraId { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede  estar vacio.")]
         [Range(minimum: 1, maximum: 10000000, ErrorMessage = "Este campo debe ser mayor a 0.")]

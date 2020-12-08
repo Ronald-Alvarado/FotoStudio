@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FotoStudio.Validaciones;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,9 +9,10 @@ namespace FotoStudio.Entidades
 {
     public class Usuario
     {
-        [Key] public int UsuarioId { get; set; }
+        [Key] [ValidarId] public int UsuarioId { get; set; }
 
-        public string Nombres { get; set; }
+        [Required(ErrorMessage = "Este campo no puede estar vacio.")]
+        [ValidarNombre] public string Nombres { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio.")]
         [MinLength(3, ErrorMessage = "Este campo no puede tener menos de 3 caracteres.")]

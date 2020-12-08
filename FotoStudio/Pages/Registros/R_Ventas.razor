@@ -293,17 +293,25 @@
     private void Guardar()
     {
         bool paso;
-        paso = VentaBLL.Guardar(Venta);
-
-        if (paso)
+        if (Venta.VentaDetalle.Count > 0)
         {
-            Nuevo();
-            toast.ShowSuccess("Guardado correctamente");
+            paso = VentaBLL.Guardar(Venta);
+
+            if (paso)
+            {
+                Nuevo();
+                toast.ShowSuccess("Guardado correctamente");
+            }
+            else
+            {
+                toast.ShowError("No fue posible guardar");
+            }
         }
         else
         {
-            toast.ShowError("No fue posible guardar");
+            toast.ShowError("Debe agregar un detalle");
         }
+
     }
 
     private void Agregar()

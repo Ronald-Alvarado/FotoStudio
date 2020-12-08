@@ -143,7 +143,7 @@
     protected override void OnInitialized()
     {
         Nuevo();
-        Evento.UsuarioId = Convert.ToInt32(UsuarioId);
+
     }
 
     private async void Nuevo()
@@ -155,6 +155,7 @@
             .Select(c => c.Value).FirstOrDefault();
 
         Evento = new Eventos();
+        Evento.UsuarioId = Convert.ToInt32(UsuarioId);
         Lista = FotografosBLL.GetList(f => true);
     }
 

@@ -108,7 +108,7 @@
     protected override void OnInitialized()
     {
         Nuevo();
-        Categoria.UsuarioId = Convert.ToInt32(UsuarioId);
+
     }
 
     private async void Nuevo()
@@ -120,6 +120,8 @@
             .Select(c => c.Value).FirstOrDefault();
 
         Categoria = new Categoria();
+
+        Categoria.UsuarioId = Convert.ToInt32(UsuarioId);
     }
 
     private void Guardar()

@@ -1,3 +1,4 @@
+using FotoStudio.Validaciones;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,9 +9,8 @@ namespace FotoStudio.Entidades
 { 
     public class Articulos
 {
-    [Key]
-    [Required(ErrorMessage = "Este campo no puede estar vacio.")]
-    
+    [Key] [ValidarId]
+    [Required(ErrorMessage = "Este campo no puede estar vacio.")]    
     public int ArticuloId { get; set; }
 
     [Range(minimum: 1, maximum: 200000000, ErrorMessage = "Este campo debe poseer un rango mayor a 0.")]
@@ -30,8 +30,8 @@ namespace FotoStudio.Entidades
     public decimal Stock { get; set; }
 
     [DisplayFormat(DataFormatString = "{0:C}")]
-    
-    public decimal Precio { get; set; }
+
+    [ValidarPrecio] public decimal Precio { get; set; }
 
     [DisplayFormat(DataFormatString = "{0:C}")]
     [Required(ErrorMessage = "Este campo no puede estar vacio.")]

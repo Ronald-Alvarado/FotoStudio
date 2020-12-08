@@ -11,14 +11,14 @@ namespace FotoStudio.Migrations
                 name: "Articulos",
                 columns: table => new
                 {
-                    ArticuloId = table.Column<int>(nullable: false)
+                    ArticuloId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UsuarioId = table.Column<int>(nullable: false),
-                    Descripcion = table.Column<string>(maxLength: 40, nullable: false),
-                    CategoriaId = table.Column<int>(nullable: false),
-                    Stock = table.Column<decimal>(nullable: false),
-                    Precio = table.Column<decimal>(nullable: false),
-                    Costo = table.Column<decimal>(nullable: false)
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
+                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Stock = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Precio = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Costo = table.Column<decimal>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,10 +29,10 @@ namespace FotoStudio.Migrations
                 name: "Categorias",
                 columns: table => new
                 {
-                    CategoriaId = table.Column<int>(nullable: false)
+                    CategoriaId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UsuarioId = table.Column<int>(nullable: false),
-                    Nombre = table.Column<string>(nullable: true)
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Nombre = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -43,17 +43,17 @@ namespace FotoStudio.Migrations
                 name: "Clientes",
                 columns: table => new
                 {
-                    ClienteId = table.Column<int>(nullable: false)
+                    ClienteId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UsuarioId = table.Column<int>(nullable: false),
-                    Nombres = table.Column<string>(nullable: true),
-                    Apellidos = table.Column<string>(nullable: true),
-                    Cedula = table.Column<string>(nullable: true),
-                    Direccion = table.Column<string>(nullable: false),
-                    Telefono = table.Column<string>(nullable: true),
-                    Celular = table.Column<string>(nullable: true),
-                    Sexo = table.Column<string>(nullable: false),
-                    FechaNacimiento = table.Column<DateTime>(nullable: false)
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Nombres = table.Column<string>(type: "TEXT", nullable: false),
+                    Apellidos = table.Column<string>(type: "TEXT", nullable: false),
+                    Cedula = table.Column<string>(type: "TEXT", nullable: false),
+                    Direccion = table.Column<string>(type: "TEXT", nullable: false),
+                    Telefono = table.Column<string>(type: "TEXT", nullable: false),
+                    Celular = table.Column<string>(type: "TEXT", nullable: false),
+                    Sexo = table.Column<string>(type: "TEXT", nullable: false),
+                    FechaNacimiento = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,11 +64,11 @@ namespace FotoStudio.Migrations
                 name: "Compras",
                 columns: table => new
                 {
-                    CompraId = table.Column<int>(nullable: false)
+                    CompraId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UsuarioId = table.Column<int>(nullable: false),
-                    Monto = table.Column<decimal>(nullable: false),
-                    Fecha = table.Column<DateTime>(nullable: false)
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Monto = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -79,15 +79,15 @@ namespace FotoStudio.Migrations
                 name: "Eventos",
                 columns: table => new
                 {
-                    EventoId = table.Column<int>(nullable: false)
+                    EventoId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UsuarioId = table.Column<int>(nullable: false),
-                    FotografoId = table.Column<int>(nullable: false),
-                    Descripcion = table.Column<string>(maxLength: 30, nullable: false),
-                    Lugar = table.Column<string>(nullable: false),
-                    FechaInicio = table.Column<DateTime>(nullable: false),
-                    FechaFin = table.Column<DateTime>(nullable: false),
-                    Precio = table.Column<decimal>(nullable: false)
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    FotografoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
+                    Lugar = table.Column<string>(type: "TEXT", nullable: false),
+                    FechaInicio = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    FechaFin = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Precio = table.Column<decimal>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -98,18 +98,18 @@ namespace FotoStudio.Migrations
                 name: "Fotografos",
                 columns: table => new
                 {
-                    FotografoId = table.Column<int>(nullable: false)
+                    FotografoId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    UsuarioId = table.Column<int>(nullable: false),
-                    Nombres = table.Column<string>(nullable: true),
-                    Apellidos = table.Column<string>(nullable: true),
-                    Cedula = table.Column<string>(nullable: true),
-                    Direccion = table.Column<string>(nullable: false),
-                    Telefono = table.Column<string>(nullable: true),
-                    Celular = table.Column<string>(maxLength: 10, nullable: false),
-                    Sexo = table.Column<string>(nullable: false),
-                    FechaNacimiento = table.Column<DateTime>(nullable: false),
-                    Sueldo = table.Column<decimal>(nullable: false)
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Nombres = table.Column<string>(type: "TEXT", nullable: false),
+                    Apellidos = table.Column<string>(type: "TEXT", nullable: false),
+                    Cedula = table.Column<string>(type: "TEXT", nullable: false),
+                    Direccion = table.Column<string>(type: "TEXT", nullable: false),
+                    Telefono = table.Column<string>(type: "TEXT", nullable: false),
+                    Celular = table.Column<string>(type: "TEXT", maxLength: 10, nullable: false),
+                    Sexo = table.Column<string>(type: "TEXT", nullable: false),
+                    FechaNacimiento = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Sueldo = table.Column<decimal>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -120,12 +120,12 @@ namespace FotoStudio.Migrations
                 name: "Usuarios",
                 columns: table => new
                 {
-                    UsuarioId = table.Column<int>(nullable: false)
+                    UsuarioId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Nombres = table.Column<string>(nullable: true),
-                    NombreUsuario = table.Column<string>(maxLength: 30, nullable: false),
-                    Contrasena = table.Column<string>(nullable: false),
-                    Email = table.Column<string>(nullable: false)
+                    Nombres = table.Column<string>(type: "TEXT", nullable: false),
+                    NombreUsuario = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
+                    Contrasena = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -136,13 +136,13 @@ namespace FotoStudio.Migrations
                 name: "Ventas",
                 columns: table => new
                 {
-                    VentaId = table.Column<int>(nullable: false)
+                    VentaId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    ClienteId = table.Column<int>(nullable: false),
-                    Nombres = table.Column<string>(nullable: true),
-                    Apellidos = table.Column<string>(nullable: true),
-                    Fecha = table.Column<DateTime>(nullable: false),
-                    Total = table.Column<decimal>(nullable: false)
+                    ClienteId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Nombres = table.Column<string>(type: "TEXT", nullable: false),
+                    Apellidos = table.Column<string>(type: "TEXT", nullable: false),
+                    Fecha = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Total = table.Column<decimal>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -153,14 +153,14 @@ namespace FotoStudio.Migrations
                 name: "ComprasDetalle",
                 columns: table => new
                 {
-                    ComprasDetalleId = table.Column<int>(nullable: false)
+                    ComprasDetalleId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    CompraId = table.Column<int>(nullable: false),
-                    ArticuloId = table.Column<int>(nullable: false),
-                    Descripcion = table.Column<string>(maxLength: 40, nullable: false),
-                    CantidadArticulos = table.Column<int>(nullable: false),
-                    Costo = table.Column<decimal>(nullable: false),
-                    ArticulosId = table.Column<int>(nullable: true)
+                    CompraId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ArticuloId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", maxLength: 40, nullable: false),
+                    CantidadArticulos = table.Column<int>(type: "INTEGER", nullable: false),
+                    Costo = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ArticulosId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -183,17 +183,17 @@ namespace FotoStudio.Migrations
                 name: "VentaDetalle",
                 columns: table => new
                 {
-                    VentasDetalleId = table.Column<int>(nullable: false)
+                    VentasDetalleId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    VentaId = table.Column<int>(nullable: false),
-                    ArticuloId = table.Column<int>(nullable: false),
-                    Descripcion = table.Column<string>(maxLength: 30, nullable: false),
-                    Cantidad = table.Column<int>(nullable: false),
-                    PrecioArticulo = table.Column<decimal>(nullable: false),
-                    EventoId = table.Column<int>(nullable: false),
-                    PrecioEvento = table.Column<decimal>(nullable: false),
-                    Monto = table.Column<decimal>(nullable: false),
-                    ArticulosId = table.Column<int>(nullable: true)
+                    VentaId = table.Column<int>(type: "INTEGER", nullable: false),
+                    ArticuloId = table.Column<int>(type: "INTEGER", nullable: false),
+                    Descripcion = table.Column<string>(type: "TEXT", maxLength: 30, nullable: false),
+                    Cantidad = table.Column<int>(type: "INTEGER", nullable: false),
+                    PrecioArticulo = table.Column<decimal>(type: "TEXT", nullable: false),
+                    EventoId = table.Column<int>(type: "INTEGER", nullable: false),
+                    PrecioEvento = table.Column<decimal>(type: "TEXT", nullable: false),
+                    Monto = table.Column<decimal>(type: "TEXT", nullable: false),
+                    ArticulosId = table.Column<int>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
