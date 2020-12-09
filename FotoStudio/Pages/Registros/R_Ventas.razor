@@ -193,8 +193,8 @@
 
 @code {
 
-    Venta Venta = new Venta();
-    VentaDetalle VentaD = new VentaDetalle();
+        Venta Venta = new Venta();
+        VentaDetalle VentaD = new VentaDetalle();
 
     public int ClienteSeleccionado { get; set; }
 
@@ -335,7 +335,21 @@
     {
         if (ClienteSeleccionado == 0)
         {
-            toast.ShowWarning("Tiene que seleccionar un producto.");
+            toast.ShowWarning("Tiene que seleccionar un Cliente.");
+            return;
+        }
+
+        var encontrado = ArticulosBLL.Buscar(ArticuloSeleccionado);
+
+        if (encontrado.Stock == 0)
+        {
+            toast.ShowError("El articulo que intenta agregar esta agotado, favor de suplirlo");
+            return;
+        }
+
+        if (cantidad > encontrado.Stock)
+        {
+            toast.ShowError("La cantidad del articulo que esta por agregar se excede de su inventario");
             return;
         }
 
@@ -361,11 +375,6 @@
 
             VentaBLL.RestarCantidad(Venta);
             CalcularTotal();
-
-            ClienteSeleccionado = 0;
-
-
-
         }
 
     }
@@ -430,7 +439,9 @@
             var encontrado = VentaBLL.Buscar(Venta.VentaId);
 
             if (encontrado != null)
+            {
                 this.Venta = encontrado;
+            }
             else
                 toast.ShowWarning("No encontrado");
         }
