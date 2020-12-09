@@ -9,13 +9,7 @@
     <EditForm Model="usuario" OnValidSubmit="Guardar">
         <DataAnnotationsValidator />
 
-        <div class="view" style="
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-image: url('resources/fondo.jpg');
-        background-position: center;
-        width: auto;
-        height: 880px;">
+        <div class="view BackGroundGeneral" >
 
             <div class="container shadow-lg p-3 rb-5 bg-light border-dark col-md-8">
                 <div class="card">
@@ -29,7 +23,7 @@
                             <div class="input-group">
                                 <InputNumber @bind-Value="usuario.UsuarioId" class="form-control" />
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary input-group-text oi-location" @onclick="Buscar">Buscar</button>
+                                    <button type="button" class="btn btn-primary input-group-text oi-magnifying-glass" @onclick="Buscar">Buscar</button>
                                 </div>
                             </div>
                         </div>
@@ -48,8 +42,13 @@
 
                         <div class="form-group">
                             <label>Contraseña</label>
-                            <InputText @bind-Value="usuario.Contrasena" class="form-control" />
+                            <input type="password" @bind-value="usuario.Contrasena" class="form-control" />
                             <ValidationMessage For="@(() => usuario.Contrasena)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label>Verificar Contraseña</label>
+                            <input type="password" @bind-value="Password" class="form-control" />
                         </div>
 
                         <div class="form-group">
@@ -84,6 +83,8 @@
 
     [Parameter] public int UsuarioId { get; set; }
 
+    private string Password { get; set; }
+
     protected override void OnInitialized()
     {
         Nuevo();
@@ -92,10 +93,16 @@
     private void Nuevo()
     {
         usuario = new Usuario();
+        Password = string.Empty;
     }
 
     private void Guardar()
     {
+        if(usuario.Contrasena != Password)
+        {
+            Toast.ShowError("La Contraseña no coincide");
+            return;
+        }
         bool guardado;
 
         guardado = UsuarioBLL.Guardar(usuario);

@@ -8,6 +8,24 @@ a, .btn-link {
     color: #0366d6;
 }
 
+.BackGroundGeneral {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('../resources/fondo.jpg');
+    background-position: center;
+    width: auto;
+    height: 880px;
+}
+
+.BackGroundLogin {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('../resources/loginfondo.jpg');
+    background-position: center;
+    width: auto;
+    height: 880px;
+}
+
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;

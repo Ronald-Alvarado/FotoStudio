@@ -1,0 +1,11 @@
+﻿body {
+}
+
+.BackGroundGeneral {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('../resources/fondo.jpg');
+    background-position: center;
+    width: auto;
+    height: 880px;
+}
