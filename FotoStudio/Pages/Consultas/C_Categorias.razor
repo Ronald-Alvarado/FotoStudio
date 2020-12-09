@@ -59,11 +59,12 @@
                         <tbody class="bg-white">
                             @foreach (var item in auxListaCategorias)
                             {
-                                <tr>
-                                    <td>@item.CategoriaId</td>
-                                    <td>@item.UsuarioId</td>
-                                    <td>@item.Nombre</td>
-                                </tr>
+                            <tr>
+                                <td>@item.CategoriaId</td>
+                                <td>@item.UsuarioId</td>
+                                <td>@item.Nombre</td>
+                                <td><a href="@($"RCategorias/{item.CategoriaId}")">Ver Categoria</a></td>
+                            </tr>
                             }
                         </tbody>
                     </table>

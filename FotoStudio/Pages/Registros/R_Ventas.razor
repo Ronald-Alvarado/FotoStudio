@@ -214,10 +214,23 @@
     protected override void OnInitialized()
     {
         Nuevo();
-
-
+        BuscarParametro();
     }
 
+    private void BuscarParametro()
+    {
+        if (VentaId > 0)
+        {
+            var VentaBuscado = VentaBLL.Buscar(VentaId);
+
+            if (VentaBuscado != null)
+            {
+                this.Venta = VentaBuscado;
+            }
+            else
+                toast.ShowError("El cobro no existe");
+        }
+    }
 
 
     private void Nuevo()

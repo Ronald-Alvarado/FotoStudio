@@ -158,7 +158,22 @@
     protected override void OnInitialized()
     {
         Nuevo();
+        BuscarParametro();
+    }
 
+    private void BuscarParametro()
+    {
+        if (FotografoId > 0)
+        {
+            var FotografoBuscado = FotografosBLL.Buscar(FotografoId);
+
+            if (FotografoBuscado != null)
+            {
+                this.Fotografo = FotografoBuscado;
+            }
+            else
+                toast.ShowError("El cobro no existe");
+        }
     }
 
     private async void Nuevo()

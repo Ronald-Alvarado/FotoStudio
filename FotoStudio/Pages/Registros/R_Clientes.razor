@@ -153,7 +153,22 @@
     protected override void OnInitialized()
     {
         Nuevo();
+        BuscarParametro();
+    }
 
+    private void BuscarParametro()
+    {
+        if (ClienteId > 0)
+        {
+            var ClienteBuscado = ClienteBLL.Buscar(ClienteId);
+
+            if (ClienteBuscado != null)
+            {
+                this.Cliente = ClienteBuscado;
+            }
+            else
+                toast.ShowError("El cobro no existe");
+        }
     }
 
     private async void Nuevo()

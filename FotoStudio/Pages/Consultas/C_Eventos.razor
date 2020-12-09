@@ -85,16 +85,17 @@
                             <tbody class="bg-white">
                                 @foreach (var item in auxListaEventos)
                                 {
-                                    <tr>
-                                        <td>@item.EventoId</td>
-                                        <td>@item.UsuarioId</td>
-                                        <td>@item.FotografoId</td>
-                                        <td>@item.Descripcion</td>
-                                        <td>@item.Lugar</td>
-                                        <td>@item.Precio</td>
-                                        <td>@item.FechaInicio</td>
-                                        <td>@item.FechaFin</td>
-                                    </tr>
+                                <tr>
+                                    <td>@item.EventoId</td>
+                                    <td>@item.UsuarioId</td>
+                                    <td>@item.FotografoId</td>
+                                    <td>@item.Descripcion</td>
+                                    <td>@item.Lugar</td>
+                                    <td>@item.Precio</td>
+                                    <td>@item.FechaInicio</td>
+                                    <td>@item.FechaFin</td>
+                                    <td><a href="@($"REventos/{item.EventoId}")">Ver Evento</a></td>
+                                </tr>
                                 }
                             </tbody>
                         </table>

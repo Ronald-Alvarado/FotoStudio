@@ -179,6 +179,22 @@
     protected override void OnInitialized()
     {
         Nuevo();
+        BuscarParametro();
+    }
+
+    private void BuscarParametro()
+    {
+        if (CompraId > 0)
+        {
+            var CompraBuscado = ComprasBLL.Buscar(CompraId);
+
+            if (CompraBuscado != null)
+            {
+                this.Compra = CompraBuscado;
+            }
+            else
+                toast.ShowError("El cobro no existe");
+        }
     }
 
     private string ObtenerDescripcion(int id)

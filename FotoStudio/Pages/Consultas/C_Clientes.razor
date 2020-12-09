@@ -94,17 +94,18 @@
                         <tbody class="bg-white">
                             @foreach (var item in auxListaClientes)
                             {
-                                <tr>
-                                    <td>@item.ClienteId</td>
-                                    <td>@item.UsuarioId</td>
-                                    <td>@item.Nombres</td>
-                                    <td>@item.Apellidos</td>
-                                    <td>@item.Cedula</td>
-                                    <td>@item.Telefono</td>
-                                    <td>@item.Celular</td>
-                                    <td>@item.Direccion</td>
-                                    <td>@item.FechaNacimiento.ToString("dd/MM/yyyy")</td>
-                                </tr>
+                            <tr>
+                                <td>@item.ClienteId</td>
+                                <td>@item.UsuarioId</td>
+                                <td>@item.Nombres</td>
+                                <td>@item.Apellidos</td>
+                                <td>@item.Cedula</td>
+                                <td>@item.Telefono</td>
+                                <td>@item.Celular</td>
+                                <td>@item.Direccion</td>
+                                <td>@item.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                                <td><a href="@($"RClientes/{item.ClienteId}")">Ver Cliente</a></td>
+                            </tr>
                             }
                         </tbody>
                     </table>

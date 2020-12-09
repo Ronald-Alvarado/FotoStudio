@@ -100,12 +100,13 @@
                             <tbody class="bg-white">
                                 @foreach (var item in auxListaCompras)
                                 {
-                                    <tr>
-                                        <td>@item.CompraId</td>
-                                        <td>@item.UsuarioId</td>
-                                        <td>@item.Monto</td>
-                                        <td>@item.Fecha</td>
-                                    </tr>
+                                <tr>
+                                    <td>@item.CompraId</td>
+                                    <td>@item.UsuarioId</td>
+                                    <td>@item.Monto</td>
+                                    <td>@item.Fecha</td>
+                                    <td><a href="@($"RCompras/{item.CompraId}")">Ver Compra</a></td>
+                                </tr>
                                 }
                             </tbody>
                         </table>

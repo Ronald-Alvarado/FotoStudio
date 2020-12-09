@@ -33,8 +33,6 @@ namespace FotoStudio.Entidades
         [ValidarTelefono] public string Telefono { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio.")]
-        [MinLength(3, ErrorMessage = "Este campo no puede tener menos de 3 caracteres.")]
-        [MaxLength(10, ErrorMessage = "Ha alcanzado el maximo de caracteres.")]
         [ValidarTelefono] public string Celular { get; set; }
 
         [Required(ErrorMessage = "Este campo no puede estar vacio.")]

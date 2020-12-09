@@ -108,7 +108,22 @@
     protected override void OnInitialized()
     {
         Nuevo();
+        BuscarParametro();
+    }
 
+    private void BuscarParametro()
+    {
+        if (CategoriaId > 0)
+        {
+            var CategoriaBuscado = CategoriaBLL.Buscar(CategoriaId);
+
+            if (CategoriaBuscado != null)
+            {
+                this.Categoria = CategoriaBuscado;
+            }
+            else
+                toast.ShowError("El cobro no existe");
+        }
     }
 
     private async void Nuevo()

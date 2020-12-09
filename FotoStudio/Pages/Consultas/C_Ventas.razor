@@ -90,14 +90,15 @@
                         <tbody class="bg-white">
                             @foreach (var item in auxListaVentas)
                             {
-                                <tr>
-                                    <td>@item.VentaId</td>
-                                    <td>@item.ClienteId</td>
-                                    <td>@item.Nombres</td>
-                                    <td>@item.Apellidos</td>
-                                    <td>@item.Total</td>
-                                    <td>@item.Fecha</td>
-                                </tr>
+                            <tr>
+                                <td>@item.VentaId</td>
+                                <td>@item.ClienteId</td>
+                                <td>@item.Nombres</td>
+                                <td>@item.Apellidos</td>
+                                <td>@item.Total</td>
+                                <td>@item.Fecha</td>
+                                <td><a href="@($"RVentas/{item.VentaId}")">Ver Venta</a></td>
+                            </tr>
                             }
                         </tbody>
                     </table>

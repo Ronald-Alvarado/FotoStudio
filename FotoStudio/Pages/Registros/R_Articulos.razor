@@ -141,6 +141,22 @@
         Nuevo();
 
         Lista = CategoriaBLL.GetList(c => true);
+        BuscarParametro();
+    }
+
+    private void BuscarParametro()
+    {
+        if (ArticuloId > 0)
+        {
+            var ArticuloBuscado = ArticulosBLL.Buscar(ArticuloId);
+
+            if (ArticuloBuscado != null)
+            {
+                this.Articulo = ArticuloBuscado;
+            }
+            else
+                toast.ShowError("El cobro no existe");
+        }
     }
 
     private void ObtenerCategoria()

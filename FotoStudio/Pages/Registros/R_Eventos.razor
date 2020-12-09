@@ -1,5 +1,5 @@
 ﻿@page "/REventos"
-@page "/REventosos/{EventoId:int}"
+@page "/REventos/{EventoId:int}"
 
 @using FotoStudio.Entidades
 @using FotoStudio.BLL
@@ -143,7 +143,22 @@
     protected override void OnInitialized()
     {
         Nuevo();
+        BuscarParametro();
+    }
 
+    private void BuscarParametro()
+    {
+        if (EventoId > 0)
+        {
+            var EventoBuscado = EventosBLL.Buscar(EventoId);
+
+            if (EventoBuscado != null)
+            {
+                this.Evento = EventoBuscado;
+            }
+            else
+                toast.ShowError("El cobro no existe");
+        }
     }
 
     private async void Nuevo()
